@@ -41,5 +41,42 @@ namespace API.Controllers
             return Ok(product);
                
         }
+
+        [HttpPut("UpdateProduct")]
+        public IActionResult Update(Product product, int id) 
+        {
+            var products = _context.Products.FirstOrDefault(p => p.ProductId == id);    
+            if (products == null)
+            {
+                return NotFound();
+            }
+
+            products.ProductName = product.ProductName;
+            products.Describe = product.Describe;
+            products.Quantity = product.Quantity;
+            products.Price = product.Price;
+            product.WarehouseId = product.WarehouseId;
+            products.CategoryId = product.CategoryId;
+            products.Status = product.Status;
+            products.SuppliersId = product.SuppliersId;
+
+            _context.Entry(products).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.SaveChanges();
+            return Ok(products);
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            Product product = _context.Products.FirstOrDefault(p => p.ProductId == id);
+            if (product == null)
+            {
+                return NotFound(id);
+            }
+
+            _context.Products.Remove(product);
+            _context.SaveChanges();
+            return Ok(product);
+        }
     }
 }
