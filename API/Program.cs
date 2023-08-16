@@ -21,6 +21,7 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.AddProfile(new SupplierMapper());
     mc.AddProfile(new WarehouseMapper());
     mc.AddProfile(new AccountMapper());
+    mc.AddProfile(new ProductMapper());
     mc.AddProfile(new InvoiceMapping());
 });
 IMapper mapper = mapperConfig.CreateMapper();

@@ -44,10 +44,10 @@ namespace API.Controllers
 
 
 
-        [HttpPut("{invoiceId}")]
-        public async Task<IActionResult> UpdateOrderStatus(int invoiceId)
+        [HttpPut("{ChangeStatusInvoiceId}")]
+        public async Task<IActionResult> UpdateOrderStatus(int ChangeStatusInvoiceId)
         {
-            var invoice = await _context.Invoices.FindAsync(invoiceId);
+            var invoice = await _context.Invoices.FindAsync(ChangeStatusInvoiceId);
 
             if (invoice == null)
             {
