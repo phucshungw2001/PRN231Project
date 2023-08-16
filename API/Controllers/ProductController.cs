@@ -26,7 +26,7 @@ namespace API.Controllers
             return Ok(_mapper.Map<List<ProductDTO>>(products));
         }
 
-        [HttpGet("GetSProductById/{id}")]
+        [HttpGet("GetProductById/{id}")]
         public IActionResult GetbyId(int id)
         {
             List<Product> products = _context.Products.Where(s => s.ProductId == id).ToList();
