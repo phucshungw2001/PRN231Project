@@ -22,12 +22,12 @@ namespace API.Controllers
         [HttpGet]
         public async Task<List<InvoiceDTO>> GetInvoice()
         {
-            var orders = _context.Invoices
+            var invoices = _context.Invoices
                 .Include(o => o.InvoiceDetails)
                 .ThenInclude(od => od.Product)
                 .ToList();
 
-            return _mapper.Map<List<InvoiceDTO>>(orders);
+            return _mapper.Map<List<InvoiceDTO>>(invoices);
         }
 
         [HttpGet("{InvoiceCustomerId}")]
@@ -96,7 +96,5 @@ namespace API.Controllers
                 return StatusCode(500, ex.InnerException.Message);
             }
         }
-
-
     }
 }

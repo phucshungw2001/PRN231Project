@@ -23,6 +23,7 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.AddProfile(new AccountMapper());
     mc.AddProfile(new ProductMapper());
     mc.AddProfile(new InvoiceMapping());
+    mc.AddProfile(new CategoriesMapping());
 });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
