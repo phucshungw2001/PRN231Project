@@ -25,6 +25,7 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.AddProfile(new InvoiceMapping());
     mc.AddProfile(new ReceiptDetailMapper());
     mc.AddProfile(new StockReceiptMapper());
+    mc.AddProfile(new CategoriesMapping());
 });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);

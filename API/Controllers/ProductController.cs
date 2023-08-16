@@ -104,8 +104,5 @@ namespace API.Controllers
             _context.SaveChanges();
             return Ok(product);
         }
-
-
-
     }
 }
