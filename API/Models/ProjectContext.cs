@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace API.Models
 {
-    public partial class WarehousesContext : DbContext
+    public partial class ProjectContext : DbContext
     {
-        public WarehousesContext()
+        public ProjectContext()
         {
         }
 
-        public WarehousesContext(DbContextOptions<WarehousesContext> options)
+        public ProjectContext(DbContextOptions<ProjectContext> options)
             : base(options)
         {
         }
@@ -33,11 +33,8 @@ namespace API.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var conf = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-                if (!optionsBuilder.IsConfigured)
-                {
-                    optionsBuilder.UseSqlServer(conf.GetConnectionString("DbConnection"));
-                } 
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("server=localhost\\SQLEXPRESS; Database=Warehouses;Integrated security=true");
             }
         }
 
@@ -197,7 +194,9 @@ namespace API.Models
 
             modelBuilder.Entity<ReceiptDetail>(entity =>
             {
-                entity.Property(e => e.ReceiptDetailId).HasColumnName("ReceiptDetailID");
+                entity.Property(e => e.ReceiptDetailId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ReceiptDetailID");
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
@@ -229,7 +228,9 @@ namespace API.Models
             {
                 entity.HasKey(e => e.ReceiptId);
 
-                entity.Property(e => e.ReceiptId).HasColumnName("ReceiptID");
+                entity.Property(e => e.ReceiptId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ReceiptID");
 
                 entity.Property(e => e.DateReceipt).HasColumnType("date");
 
