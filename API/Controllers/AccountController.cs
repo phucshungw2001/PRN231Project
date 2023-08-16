@@ -2,9 +2,6 @@
 using API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Controllers
 {
