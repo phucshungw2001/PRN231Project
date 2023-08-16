@@ -1,0 +1,23 @@
+﻿using API.DTO;
+using API.Models;
+using AutoMapper;
+
+namespace API.Mapper{
+    public class AccountMapper : Profile
+    {
+        public AccountMapper()
+        {
+            CreateMap<Account, AccountDTO>()
+                .ForMember(des => des.UserName,
+                            act => act.MapFrom(src => src.UserName))
+                .ForMember(des => des.AccountId,
+                            act => act.MapFrom(src => src.AccountId))
+                .ForMember(des => des.Password,
+                            act => act.MapFrom(src => src.Password))
+                .ForMember(des => des.IsActive,
+                            act => act.MapFrom(src => src.IsActive))
+                .ForMember(des => des.Role,
+                            act => act.MapFrom(src => src.Role));
+        }
+    }
+}

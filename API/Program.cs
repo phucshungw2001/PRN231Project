@@ -20,6 +20,7 @@ var mapperConfig = new MapperConfiguration(mc =>
 {
     mc.AddProfile(new SupplierMapper());
     mc.AddProfile(new WarehouseMapper());
+    mc.AddProfile(new AccountMapper());
 });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
