@@ -2,6 +2,7 @@
 using API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -16,6 +17,13 @@ namespace API.Controllers
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        [HttpGet]
+        public IActionResult Get()
+        {
+            List<Account> account = _context.Accounts.ToList();
+            return Ok(_mapper.Map<List<AccountDTO>>(account));
         }
 
         [HttpPost("login")]
@@ -84,5 +92,37 @@ namespace API.Controllers
 
             return Ok("Registration successful!");
         }
+
+        [HttpPut("editProfile")]
+        public async Task<IActionResult> EditProfile(string email, [FromBody] EditProfileForm updateDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var existingAccount = await _context.Accounts.SingleOrDefaultAsync(a => a.UserName == email);
+                if (existingAccount == null)
+                {
+                    return NotFound("Account not found.");
+                }
+
+                existingAccount.Customer.Phone = updateDto.Phone;
+                existingAccount.Customer.CustomerName = updateDto.CustomerName;
+                existingAccount.Customer.Address = updateDto.Address;
+
+                _context.Accounts.Update(existingAccount);
+                await _context.SaveChangesAsync();
+
+                return Ok("Profile updated successfully!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
     }
 }
