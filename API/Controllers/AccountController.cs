@@ -1,8 +1,13 @@
 ﻿using API.DTO;
+using API.Form;
 using API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace API.Controllers
 {
@@ -12,11 +17,13 @@ namespace API.Controllers
     {
         private WarehousesContext _context;
         private IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(WarehousesContext context, IMapper mapper)
+        public AccountController(WarehousesContext context, IMapper mapper, IConfiguration configuration)
         {
             _context = context;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -27,32 +34,37 @@ namespace API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDTO loginInfo)
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody] LoginForm login)
         {
-            try
-            {
-                if (string.IsNullOrEmpty(loginInfo.UserName) ||
-                    string.IsNullOrEmpty(loginInfo.Password))
-                {
-                    throw new ApplicationException("Login Information is invalid!! Please check again...");
-                }
 
-                Account loginAccount = _context.Accounts.SingleOrDefault(x => x.UserName == loginInfo.UserName && x.Password == loginInfo.Password);
-                if (loginAccount == null)
-                {
-                    throw new ApplicationException("Failed to login! Please check the information again...");
-                }
+            var result = _context.Accounts.SingleOrDefault(x => x.UserName == login.Email && x.Password == login.Password);
 
-                AccountDTO loginAccountDTO = _mapper.Map<AccountDTO>(loginAccount);
-                return Ok(loginAccountDTO); 
-            }
-            catch (ApplicationException ae)
+            if (result != null)
             {
-                return BadRequest(ae.Message); 
+                var claims = new[]
+                {
+                    new Claim(ClaimTypes.Name, login.Email),
+                    new Claim(ClaimTypes.Role, result.Role),
+                 };
+
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["Jwt:ExpiryInDays"]));
+                var token = new JwtSecurityToken(
+                    _configuration["Jwt:Issuer"],
+                    _configuration["Jwt:Audience"],
+                    claims,
+                    expires: expiry,
+                    signingCredentials: creds
+                );
+
+                return Ok(new LoginResponse { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) });
             }
-            catch (Exception ex)
+
+            else
             {
-                return StatusCode(500, ex.Message); 
+                return BadRequest("Invalid login attempt.");
             }
         }
 

@@ -1,4 +1,4 @@
-﻿namespace API.DTO
+﻿namespace API.Form
 {
     public class EditProfileForm
     {
