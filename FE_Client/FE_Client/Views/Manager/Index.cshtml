@@ -1,4 +1,4 @@
-﻿@*
+﻿
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!------ Include the above in your HEAD tag ---------->
@@ -14,12 +14,8 @@
                     <div class="col-md-6">
                         <div class="profile-head">
                             <h5>
-                                @Model.Employee.LastName @Model.Employee.FirstName
+                            @Model.Manager.ManagerName
                             </h5>
-                            <h6>
-                                @Model.Employee.Title
-                            </h6>
-
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Thông Tin</a>
@@ -28,10 +24,10 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-md-2">
+@*                    <div class="col-md-2">
                         <a class="profile-edit-btn" href="~/Manager/Profile/EditProflie?@Model.Employee.EmployeeId">Chỉnh Sửa</a>
 
-                    </div>
+                    </div>*@
                 </div>
                 <div class="row">
                     <div class="col-md-4">
@@ -46,7 +42,7 @@
                                         <label>Tên</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <p>@Model.Employee.LastName @Model.Employee.FirstName</p>
+                                    <p>@Model.Manager.ManagerName</p>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -54,10 +50,10 @@
                                         <label>Email</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <p>@Model.Account.Email</p>
+                                    <p>@Model.userName</p>
                                     </div>
                                 </div>
-                                <div class="row">
+                              @*  <div class="row">
                                     <div class="col-md-6">
                                         <label>Số điện thoại</label>
                                     </div>
@@ -72,7 +68,7 @@
                                     <div class="col-md-6">
                                         <p>@Model.Employee.BirthDate?.ToShortDateString()</p>
                                     </div>
-                                </div>
+                                </div>*@
                             </div>
 
                         </div>
@@ -198,6 +194,4 @@
         }
     </style>
 
-*@
 
-<h1>Hello Manager</h1>

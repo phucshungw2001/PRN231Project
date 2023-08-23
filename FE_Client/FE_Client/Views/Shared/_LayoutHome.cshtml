@@ -44,7 +44,7 @@
                         <li class="nav-item">
                             <a href="#" class="nav-link">Blog</a>
                         </li>
-                        @if (Context.Session.GetString("PetSession") == null)
+                        @if (Context.Session.GetString("UserSession") == null)
                         {
                             <li class="nav-item">
                                 <a href="~/Register/Index" class="nav-link">Đăng ký</a>
@@ -65,7 +65,7 @@
                                     <li>
                                         <div class="drop-title">Your Cart</div>
                                     </li>
-                                    <li>
+                                   @* <li>
                                         <div class="shopping-cart-list">
                                             <div class="media">
                                                 <img class="d-flex mr-3" src="/assets/img/logo/avatar.jpg" width="60">
@@ -112,7 +112,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </li>
+                                    </li>*@
                                     <li>
                                         <div class="drop-title d-flex justify-content-between">
                                             <span>Total:</span>
