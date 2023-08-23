@@ -6,7 +6,7 @@
     {
         Layout = Context.User.Identity.IsAuthenticated ? "_LayoutManager" : "_LayoutHome";
 
-        if (Context.User.Identity.IsAuthenticated && !User.IsInRole("1"))
+        if (Context.User.Identity.IsAuthenticated && !User.IsInRole("MANAGER"))
         {
             Layout = "~/Views/Shared/_LayoutHome.cshtml";
         }
@@ -15,5 +15,4 @@
     {
         Layout = "~/Views/Shared/_LayoutHome.cshtml";
     }
-
 }

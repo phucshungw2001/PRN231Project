@@ -33,8 +33,14 @@ namespace API.Controllers
             return Ok(_mapper.Map<List<AccountDTO>>(account));
         }
 
+        [HttpGet("{email}")]
+        public IActionResult GetAccount(string email)
+        {
+            Account account = _context.Accounts.FirstOrDefault(a => a.UserName == email);
+            return Ok(account.Role);
+        }
+
         [HttpPost("login")]
-        [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginForm login)
         {
 
