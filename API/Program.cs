@@ -73,6 +73,7 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.AddProfile(new ReceiptDetailMapper());
     mc.AddProfile(new StockReceiptMapper());
     mc.AddProfile(new CategoriesMapping());
+    mc.AddProfile(new UserMapping());
 });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
