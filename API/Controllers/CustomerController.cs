@@ -44,15 +44,15 @@ namespace API.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var existingAccount = await _context.Accounts.SingleOrDefaultAsync(a => a.UserName == email);
+                var existingAccount = await _context.Accounts.Include(a => a.Customer).SingleOrDefaultAsync(a => a.UserName == email);
                 if (existingAccount == null)
                 {
                     return NotFound("Account not found.");
                 }
 
-                existingAccount.Customer.Phone = updateDto.Phone;
                 existingAccount.Customer.CustomerName = updateDto.Name;
                 existingAccount.Customer.Address = updateDto.Address;
+                existingAccount.Customer.Phone = updateDto.Phone;
 
                 _context.Accounts.Update(existingAccount);
                 await _context.SaveChangesAsync();

@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Product Details</title>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 class="sidebar-title">Chi tiết sản phẩm</h2>
+    </div>
+    <div class="main-content">
+        <section id="vegetables" class="gray-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="content">
+                            @foreach (var product in Model)
+                            {
+                                <div id="category-content-@product.ProductId" class="category-content">
+                                    <h3 class="category-title">@product.ProductName</h3>
+                                    <br />
+                                    <p>Quantity: @product.Quantity</p>
+                                    <br/>
+                                    <p>Price: @product.Price</p>
+                                    <br />
+                                    <p>
+                                        Status:  @if (product.Status)
+                                        {
+                                            <span class="status available">Available</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status sold-out">Sold Out</span>
+                                        }
+                                    </p>
+                                    <br />
+                                    <p>Description: @product.Describe</p>
+                                </div>
+                            }
+                            <a class="back-button" href="javascript:history.back()">Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+<style>
+    /* Reset some default styles */
+    body, h1, h2, h3, p {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Sidebar styles */
+    .sidebar {
+        background-color: #3f51b5;
+        color: #fff;
+        padding: 20px;
+    }
+
+    /* Main content styles */
+    .main-content {
+        padding: 20px;
+    }
+
+    /* Category content styles */
+    .category-content {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin-bottom: 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .category-title {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: #3f51b5;
+    }
+
+    /* Back button styles */
+    .back-button {
+        display: inline-block;
+        background-color: #f44336;
+        color: #fff;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 20px;
+        transition: background-color 0.3s ease;
+    }
+
+        .back-button:hover {
+            background-color: #d32f2f;
+        }
+
+    .available {
+        color: #4caf50;
+    }
+
+    .sold-out {
+        color: #f44336;
+    }
+
+</style>
+</html>
+

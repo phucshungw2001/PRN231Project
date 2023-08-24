@@ -1,4 +1,4 @@
-﻿namespace API.Form
+﻿namespace FE_Client.Form
 {
     public class EditProfileForm
     {
