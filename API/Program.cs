@@ -15,7 +15,7 @@ builder.Services.AddDbContext<WarehousesContext>(
     opt => opt.UseSqlServer(
         builder.Configuration.GetConnectionString("DbConnection"))
     );
-
+builder.Services.AddCors();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -88,6 +88,13 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API v1");
     });
 }
+app.UseCors(builder =>
+{
+    builder.AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod();
+});
+
 
 app.UseHttpsRedirection();
 

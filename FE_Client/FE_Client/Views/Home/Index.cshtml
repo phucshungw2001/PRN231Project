@@ -6,3 +6,89 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+
+
+@model List<API.DTO.ProductDTO>
+
+<h1>Product list</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>ProductName</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            @*<th>Status</th>*@
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.ProductId</td>
+                <td>@product.ProductName</td>
+                <td>@product.Quantity</td>
+                <td>@product.Price</td>
+                @*<td>@product.Status</td>*@
+                <td>
+                    <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal_@product.ProductId">Delete</a>
+                </td>
+            </tr>
+
+            <div class="modal fade" id="deleteModal_@product.ProductId" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel_@product.ProductId" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel_@product.ProductId">Delete Quantity for @product.ProductName</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="number" id="deleteQuantityInput_@product.ProductId" class="form-control" placeholder="Enter quantity to delete">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger" onclick="deleteProductQuantity(@product.ProductId)">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        function deleteProductQuantity(productId) {
+            var deleteQuantity = parseInt(document.getElementById("deleteQuantityInput_" + productId).value);
+            if (!isNaN(deleteQuantity) && deleteQuantity > 0 && deleteQuantity <= 500) { // Thêm điều kiện kiểm tra
+                var url = `http://localhost:5000/api/Product/DeleteQuantityProduct?productId=${productId}&deletedQuantity=${deleteQuantity}`;
+
+                fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        updateProductRow(productId, result.Quantity);
+                        $("#deleteModal_" + productId).modal("hide");
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        }
+    </script>
+}
+
+
+
+
+
+
+
+

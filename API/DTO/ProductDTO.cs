@@ -14,13 +14,14 @@ namespace API.DTO
         public int? CategoryId { get; set; }
         public bool? Status { get; set; }
         public int? SuppliersId { get; set; }
+        //public List<QuantityChangeDTO> QuantityChanges { get; set; }
 
-       /* public virtual Category? Category { get; set; }
-        public virtual Supplier? Suppliers { get; set; }
-        public virtual Warehouse? Warehouse { get; set; }
-        public virtual ICollection<InvoiceDetail>? InvoiceDetails { get; set; }
-        public virtual ICollection<ReceiptDetail>? ReceiptDetails { get; set; }
+        /* public virtual Category? Category { get; set; }
+         public virtual Supplier? Suppliers { get; set; }
+         public virtual Warehouse? Warehouse { get; set; }
+         public virtual ICollection<InvoiceDetail>? InvoiceDetails { get; set; }
+         public virtual ICollection<ReceiptDetail>? ReceiptDetails { get; set; }
 
-        public virtual ICollection<Warehouse>? Warehouses { get; set; }*/
+         public virtual ICollection<Warehouse>? Warehouses { get; set; }*/
     }
 }
