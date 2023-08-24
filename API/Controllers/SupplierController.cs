@@ -32,6 +32,20 @@ namespace API.Controllers
             return Ok(_mapper.Map<List<SupplierDTO>>(suppliers));
         }
 
+        [HttpDelete("DeleteSupperlierById")]
+        public IActionResult Delete(int id)
+        {
+            Supplier supplier = _context.Suppliers.FirstOrDefault(w => w.SuppliersId == id);
+            if (supplier == null)
+            {
+                return NotFound(id);
+            }
+
+            _context.Suppliers.Remove(supplier);
+            _context.SaveChanges();
+            return Ok(supplier);
+        }
+
         [HttpPost("AddSupperlier")]
         public IActionResult Add(Supplier supplier) 
         {

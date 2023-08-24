@@ -1,0 +1,129 @@
+﻿@model API.Models.Supplier
+
+<!DOCTYPE html>
+<html>
+<body>
+    <div class="sidebar">
+        <h2 class="sidebar-title">Thêm nhà cung cấp</h2>
+    </div>
+    <div id="page-content" class="page-content">
+        <div class="container">
+            <div class="card card-login mb-5">
+                <div class="card-body">
+                    <form class="form-horizontal" method="post">
+                        <div class="form-group row mt-3">
+                            <div class="col-md-12">
+                                <input asp-for="SuppliersName" class="form-control" type="text" required="" placeholder="Suppliers Name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <input asp-for="Address" class="form-control" type="text" required="" placeholder="Address">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <input asp-for="Phone" class="form-control" type="text" required="" placeholder="Phone">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <input asp-for="Email" class="form-control" type="text" required="" placeholder="Email">
+                            </div>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                        {
+                            <div class="alert alert-danger">
+                                @ViewBag.ErrorMessage
+                            </div>
+                        }
+                        @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+                        {
+                            <div class="alert alert-success" style="color: green">
+                                @ViewBag.SuccessMessage
+                            </div>
+                        }
+                        <div class="form-group row text-center mt-4">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary btn-block text-uppercase">Add Suppliers</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <a class="back-button" href="SupperlierList">Back</a>
+            </div>
+        </div>
+    </div>
+</body>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+    }
+
+    .sidebar {
+        background-color: #343a40;
+        color: white;
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    .container {
+        padding: 20px;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        padding: 8px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 20px;
+        color: white;
+    }
+
+    .alert {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 4px;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .back-button {
+        display: block;
+        margin-top: 10px;
+        text-align: center;
+        color: #007bff;
+    }
+</style>
+</html>
+
+@section scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,11 +1,8 @@
 ﻿using API.DTO;
 using API.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace API.Controllers
 {
@@ -33,13 +30,27 @@ namespace API.Controllers
         [HttpGet("GetWareHouseById/{id}")]
         public IActionResult GetbyId(int id)
         {
-            Warehouse warehouses = _context.Warehouses.FirstOrDefault(s => s.WarehouseId == id);
+            Warehouse warehouses = _context.Warehouses.Include(w => w.Products).FirstOrDefault(s => s.WarehouseId == id);
 
             List<Product> proudct = warehouses.Products.ToList();
             WarehouseDTO warehouseDTO = _mapper.Map<WarehouseDTO>(warehouses);
             warehouseDTO.Products = _mapper.Map<List<ProductDTO>>(proudct);
 
             return Ok(warehouseDTO);
+        }
+
+        [HttpDelete("DeleteWareHouseById")]
+        public IActionResult Delete(int id)
+        {
+            Warehouse warehouse = _context.Warehouses.FirstOrDefault(w => w.WarehouseId == id);
+            if (warehouse == null)
+            {
+                return NotFound(id);
+            }
+
+            _context.Warehouses.Remove(warehouse);
+            _context.SaveChanges();
+            return Ok(warehouse);
         }
 
         [HttpPost("AddWareHouse")]

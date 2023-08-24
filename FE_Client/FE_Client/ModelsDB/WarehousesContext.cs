@@ -23,6 +23,7 @@ namespace API.Models
         public virtual DbSet<InvoiceDetail> InvoiceDetails { get; set; } = null!;
         public virtual DbSet<Manager> Managers { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
+        public virtual DbSet<QuantityChangeHistory> QuantityChangeHistories { get; set; } = null!;
         public virtual DbSet<ReceiptDetail> ReceiptDetails { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<StockReceipt> StockReceipts { get; set; } = null!;
@@ -175,12 +176,23 @@ namespace API.Models
                 entity.HasOne(d => d.Warehouse)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.WarehouseId)
-                    .HasConstraintName("FK_Products_Warehouses1");
+                    .HasConstraintName("FK_Products_Warehouses");
+            });
+
+            modelBuilder.Entity<QuantityChangeHistory>(entity =>
+            {
+                entity.ToTable("QuantityChangeHistory");
+
+                entity.Property(e => e.Action).HasMaxLength(50);
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<ReceiptDetail>(entity =>
             {
-                entity.Property(e => e.ReceiptDetailId).HasColumnName("ReceiptDetailID");
+                entity.Property(e => e.ReceiptDetailId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ReceiptDetailID");
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
@@ -212,7 +224,9 @@ namespace API.Models
             {
                 entity.HasKey(e => e.ReceiptId);
 
-                entity.Property(e => e.ReceiptId).HasColumnName("ReceiptID");
+                entity.Property(e => e.ReceiptId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ReceiptID");
 
                 entity.Property(e => e.DateReceipt).HasColumnType("date");
 

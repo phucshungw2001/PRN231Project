@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Supperlier List</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">Supperlier List</h1>
+        <div class="search-form">
+            <input type="text" class="search-input" id="supperlierName" placeholder="Search by Supperlier Name">
+            <button class="search-button" id="btnSearch">Search</button>
+        </div>
+        <div style="margin-bottom:10px">
+        <a href="AddSupperlier">
+            <button class="add-button">Thêm nhà cung cấp</button>
+        </a>
+       </div>
+        @if (Model.Count > 0)
+        {
+            <table class="customer-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>SuppliersName</th>
+                        <th>Address</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var supplier in Model)
+                    {
+                        <tr>
+                            <td>@supplier.SuppliersId</td>
+                            <td>@supplier.SuppliersName</td>
+                            <td>@supplier.Address</td>
+                            <td>@supplier.Phone</td>
+                            <td>@supplier.Email</td>
+                            <td>
+                                <a class="detail-link" href="DeleteSuppliers?suppliersId=@supplier.SuppliersId">
+                                    <button class="btn btn-danger">Delete</button>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (ViewBag.TotalPages > 1)
+            {
+                <ul class="pagination">
+                    @if (ViewBag.CurrentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("SupperlierList", new { page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">Previous</a>
+                        </li>
+                    }
+
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("SupperlierList", new { page = i, pageSize = ViewBag.PageSize })">@i</a>
+                        </li>
+                    }
+
+                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("SupperlierList", new { page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">Next</a>
+                        </li>
+                    }
+                </ul>
+            }
+
+        }
+        else
+        {
+            <p class="no-results">No customers found.</p>
+        }
+    </div>
+
+    <script>
+        document.getElementById("btnSearch").addEventListener("click", function () {
+            var searchSupperlierName = document.getElementById("supperlierName").value;
+            var url = "@Url.Action("SupperlierList")?page=1&pageSize=@ViewBag.PageSize&SupperlierName=" + searchSupperlierName;
+            window.location.href = url;
+        });
+    </script>
+</body>
+<style>
+    /* Reset some default styles */
+    body, h1, h2, h3, p {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Main container styles */
+    .container {
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Page title styles */
+    .page-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    /* Search form styles */
+    .search-form {
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        padding: 10px;
+        width: 70%;
+        border: 1px solid #ccc;
+        border-radius: 5px 0 0 5px;
+    }
+
+    .search-button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #3f51b5;
+        color: #fff;
+        border-radius: 0 5px 5px 0;
+        cursor: pointer;
+    }
+    .add-button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #3f51b5;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    /* Customer table styles */
+    .customer-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .customer-table th, .customer-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .customer-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+    /* Pagination styles */
+    .pagination {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .page-item {
+        margin: 0 5px;
+    }
+
+    .page-link {
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        text-decoration: none;
+        color: #333;
+        border-radius: 5px;
+    }
+
+        .page-link.active {
+            background-color: #3f51b5;
+            color: #fff;
+            border: 1px solid #3f51b5;
+        }
+
+</style>
+</html>

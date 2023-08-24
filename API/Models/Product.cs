@@ -9,7 +9,6 @@ namespace API.Models
         {
             InvoiceDetails = new HashSet<InvoiceDetail>();
             ReceiptDetails = new HashSet<ReceiptDetail>();
-            Warehouses = new HashSet<Warehouse>();
         }
 
         public int ProductId { get; set; }
@@ -27,7 +26,5 @@ namespace API.Models
         public virtual Warehouse? Warehouse { get; set; }
         public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; }
         public virtual ICollection<ReceiptDetail> ReceiptDetails { get; set; }
-
-        public virtual ICollection<Warehouse> Warehouses { get; set; }
     }
 }
