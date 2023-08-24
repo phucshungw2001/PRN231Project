@@ -1,7 +1,9 @@
 ﻿using API.DTO;
+using API.Models;
 using FE_Client.Form;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -28,7 +30,7 @@ namespace PetStoreClient.Controllers
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             DefaultApiUrl = "";
             DefaultApiUrlCusomer = "http://localhost:5000/api/Customer";
-            DefaultApiUrlProductList = "http://localhost:5000/api/Product/GetAllProduct";
+            DefaultApiUrlProductList = "http://localhost:5000/api/Product";
             DefaultApiUrlProductDetail = "http://localhost:5000/api/Product/GetProductById";
             DefaultApiUrlEmployee = "http://localhost:5000/api/Manager";
 
@@ -109,7 +111,7 @@ namespace PetStoreClient.Controllers
             if (HttpContext.Session.GetString("UserSession") == null)
                 return RedirectToAction("Index", "Login");
 
-            HttpResponseMessage productResponse = await _client.GetAsync(DefaultApiUrlProductList);
+            HttpResponseMessage productResponse = await _client.GetAsync(DefaultApiUrlProductList + "/GetAllProduct");
             string strProduct = await productResponse.Content.ReadAsStringAsync();
 
             var options = new JsonSerializerOptions
@@ -159,6 +161,11 @@ namespace PetStoreClient.Controllers
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
+            if(updateDto.CustomerName == null || updateDto.Address == null || updateDto.Phone == null)
+            {
+                return View();
+            }
+
             var json = NewtonsoftJson.SerializeObject(updateDto); 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             //http://localhost:5000/api/Manager/editProfile?email=manager%40gmail.com
@@ -196,6 +203,55 @@ namespace PetStoreClient.Controllers
             List<ProductDTO> productDetail = System.Text.Json.JsonSerializer.Deserialize<List<ProductDTO>>(strProductDetail, options);
 
             return View(productDetail);
+        }
+
+        public async Task<IActionResult> AddProduct(ProductDTO productForm)
+        {
+            if (HttpContext.Session.GetString("UserSession") == null)
+                return RedirectToAction("Index", "Login");
+
+            HttpResponseMessage categoryResponse = await _client.GetAsync("http://localhost:5000/api/Categories");
+
+            if (categoryResponse.IsSuccessStatusCode)
+            {
+                var categories = await categoryResponse.Content.ReadFromJsonAsync<List<CategoriesDTO>>();
+                ViewBag.Categories = new SelectList(categories, "CategoryId", "CategoryName");
+            }
+            //http://localhost:5000/api/Warehouse/GetAllWareHouse
+            HttpResponseMessage warehouseResponse = await _client.GetAsync("http://localhost:5000/api/Warehouse/GetAllWareHouse");
+
+            if (categoryResponse.IsSuccessStatusCode)
+            {
+                var warehouses = await warehouseResponse.Content.ReadFromJsonAsync<List<WarehouseDTO>>();
+                ViewBag.Warehoues = new SelectList(warehouses, "WarehouseId", "WarehouseName");
+            }
+            //http://localhost:5000/api/Supplier/GetAllSupperlier
+            HttpResponseMessage supperlierResponse = await _client.GetAsync("http://localhost:5000/api/Supplier/GetAllSupperlier");
+
+            if (supperlierResponse.IsSuccessStatusCode)
+            {
+                var supperliers = await supperlierResponse.Content.ReadFromJsonAsync<List<SupplierDTO>>();
+                ViewBag.Supperliers = new SelectList(supperliers, "SuppliersId", "SuppliersName");
+            }
+
+            if (productForm.ProductName == null || productForm.Describe == null || productForm.SuppliersId == null)
+            {
+                ViewBag.ErrorMessage = "Product data is missing.";
+                return View(); 
+            }
+
+            var json = NewtonsoftJson.SerializeObject(productForm);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await _client.PostAsync(DefaultApiUrlProductList + "/AddProduct", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                ViewBag.SuccessMessage = "Product add is sussess.";
+                return View();
+            }
+
+            return View();
         }
 
     }

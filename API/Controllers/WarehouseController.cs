@@ -3,6 +3,9 @@ using API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace API.Controllers
 {
@@ -19,17 +22,24 @@ namespace API.Controllers
         }
 
         [HttpGet("GetAllWareHouse")]
-        public IActionResult Get()
+        public IActionResult GetAllWareHouse()
         {
-            List<Warehouse> warehouses = _context.Warehouses.ToList();
-            return Ok(_mapper.Map<List<WarehouseDTO>>(warehouses));
+            List<Warehouse> warehouses = _context.Warehouses.Include(w => w.Products).ToList();
+            List<WarehouseDTO> warehouseDTOs = _mapper.Map<List<WarehouseDTO>>(warehouses);
+
+            return Ok(warehouseDTOs);
         }
 
         [HttpGet("GetWareHouseById/{id}")]
         public IActionResult GetbyId(int id)
         {
-            List<Warehouse> warehouses = _context.Warehouses.Where(s => s.WarehouseId == id).ToList();
-            return Ok(_mapper.Map<List<WarehouseDTO>>(warehouses));
+            Warehouse warehouses = _context.Warehouses.FirstOrDefault(s => s.WarehouseId == id);
+
+            List<Product> proudct = warehouses.Products.ToList();
+            WarehouseDTO warehouseDTO = _mapper.Map<WarehouseDTO>(warehouses);
+            warehouseDTO.Products = _mapper.Map<List<ProductDTO>>(proudct);
+
+            return Ok(warehouseDTO);
         }
 
         [HttpPost("AddWareHouse")]

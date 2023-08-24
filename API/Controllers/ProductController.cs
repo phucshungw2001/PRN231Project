@@ -40,7 +40,7 @@ namespace API.Controllers
         {
                 _context.Products.Add(product);
                  _context.SaveChanges();           
-            /* return Ok(_mapper.Map<List<ProductDTO>>(product));*/
+
             return Ok(product);
                
         }

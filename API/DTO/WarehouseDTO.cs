@@ -8,8 +8,7 @@ namespace API.DTO
         public int WarehouseId { get; set; }
         public string? WarehouseName { get; set; }
         public string? Address { get; set; }
-        public virtual ICollection<Product>? ProductsNavigation { get; set; }
-
-        public virtual ICollection<Product>? Products { get; set; }
+        public int TotalProducts { get; set; }
+        public virtual ICollection<ProductDTO>? Products { get; set; }
     }
 }
