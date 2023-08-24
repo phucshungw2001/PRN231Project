@@ -9,7 +9,7 @@
 
 @model List<API.DTO.ProductDTO>
 
-<h1 class="page-title">Product list</h1>
+<h1 class="page-title">Danh sách sản phẩm</h1>
 <div class="product-grid">
     @foreach (var product in Model)
     {
@@ -21,7 +21,17 @@
                 <h3>@product.ProductName</h3>
                 <p>Quantity: @product.Quantity</p>
                 <p>Price: @product.Price</p>
-                <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal_@product.ProductId">Delete</a>
+                @{
+                    string? acoount = Context.Session.GetString("UserSession");
+                    if (acoount is not null)
+                    {
+                        <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal_@product.ProductId">Lấy hàng</a>
+                    }
+                    else
+                    {
+                        <a href="~/Login/Index" class="btn btn-danger">Đăng nhập để lấy hàng</a>
+                    } 
+                }
             </div>
         </div>
 
@@ -30,17 +40,17 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel_@product.ProductId">Delete Quantity for @product.ProductName</h5>
+                        <h5 class="modal-title" id="deleteModalLabel_@product.ProductId">Số lượng sản phẩm của @product.ProductName</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <input type="number" id="deleteQuantityInput_@product.ProductId" class="form-control" placeholder="Enter quantity to delete">
+                        <input type="number" id="deleteQuantityInput_@product.ProductId" class="form-control" placeholder="Nhập số lượng sản phẩm">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-danger" onclick="deleteProductQuantity(@product.ProductId)">Delete</button>
+                        <button type="button" class="btn btn-danger" onclick="deleteProductQuantity(@product.ProductId)">Lấy hàng</button>
                     </div>
                 </div>
             </div>
@@ -73,36 +83,26 @@
 }
 
 <style>
-    /* Reset some default styles */
     body, h1, h2, h3, p {
         margin: 0;
         padding: 0;
     }
 
-    /* Main container styles */
     .container {
         max-width: 1500px;
         margin: 0 auto;
         padding: 20px;
     }
 
-    /* Page title styles */
     .page-title {
         font-size: 24px;
         margin-bottom: 20px;
     }
 
-    /* Banner styles */
-    .banner {
-        /* Your banner styles here */
-    }
-
-    /* Jumbotron styles */
     .jumbotron-bg {
-        /* Your jumbotron background styles here */
+
     }
 
-    /* Product grid styles */
     .product-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -122,8 +122,7 @@
     }
 
     .product-details {
-        margin-top: 10px;
+        margin-top: 15px;
     }
 
-    /* ... Other styles ... */
 </style>

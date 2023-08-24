@@ -40,6 +40,13 @@ namespace API.Controllers
             return Ok(account.Role);
         }
 
+        [HttpGet("GetActive/{userName}")]
+        public IActionResult GetAccountIsActive(string userName)
+        {
+            Account account = _context.Accounts.FirstOrDefault(a => a.UserName == userName);
+            return Ok(account.IsActive);
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginForm login)
         {
@@ -100,8 +107,8 @@ namespace API.Controllers
                 UserName = registerDto.UserName,
                 Password = registerDto.Password,
                 Customer = newCustomer,
-                Role = registerDto.Role,
-                IsActive = registerDto.IsActive
+                Role = "USER",
+                IsActive = true
             };
 
             await _context.Customers.AddAsync(newCustomer);
