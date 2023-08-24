@@ -37,14 +37,15 @@ namespace PetStoreClient.Controllers
                 //http://localhost:5000/api/Account/GetActive/customer01%40gmail.com
                 HttpResponseMessage roleResponse = await client.GetAsync(DefaultApiUrl + "/" + loginInfo.Email);
                 HttpResponseMessage response = await client.PostAsync(DefaultApiUrl + "/login", content);
-                HttpResponseMessage responseIsActive = await client.PostAsync(DefaultApiUrl + "/GetActive/" + loginInfo.Email);
+                HttpResponseMessage responseIsActive = await client.GetAsync(DefaultApiUrl + "/GetActive/" + loginInfo.Email);
 
                 if (response.IsSuccessStatusCode)
                 {
                     var roleContent = await roleResponse.Content.ReadAsStringAsync();
                     var isActiveContent = await responseIsActive.Content.ReadAsStringAsync();
                     string role = roleContent.Trim(' ', '\"');
-                    bool isActive = isActiveContent;
+                    string isActives = isActiveContent;
+                    bool isActive = bool.Parse(isActives);
                     if (!isActive)
                     {
                         ViewBag.ErrorMessage = "Tài khoản bị khoá";
