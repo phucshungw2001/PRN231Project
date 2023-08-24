@@ -23,6 +23,7 @@ namespace PetStoreClient.Controllers
         private string DefaultApiUrlProductDetail = "";
         private string DefaultApiUrlEmployee = "";
         private string DefaultApiUrlWareHouse = "";
+        private string DefaultApiUrlSupperlier = "";
 
         public ManagerController()
         {
@@ -34,7 +35,8 @@ namespace PetStoreClient.Controllers
             DefaultApiUrlProductList = "http://localhost:5000/api/Product";
             DefaultApiUrlProductDetail = "http://localhost:5000/api/Product/GetProductById";
             DefaultApiUrlEmployee = "http://localhost:5000/api/Manager";
-            DefaultApiUrlWareHouse = "http://localhost:5000/api/Warehouse/GetAllWareHouse";
+            DefaultApiUrlWareHouse = "http://localhost:5000/api/Warehouse";
+            DefaultApiUrlSupperlier = "http://localhost:5000/api/Supplier";
 
         }
         public async Task<IActionResult> Index()
@@ -72,7 +74,6 @@ namespace PetStoreClient.Controllers
 
             return View();
         }
-
 
         public async Task<IActionResult> CustomerList(int page = 1, int pageSize = 10, string customerName = "")
         {
@@ -112,7 +113,7 @@ namespace PetStoreClient.Controllers
             if (HttpContext.Session.GetString("UserSession") == null)
                 return RedirectToAction("Index", "Login");
             HttpResponseMessage wareHouseResponse;
-            wareHouseResponse = await _client.GetAsync(DefaultApiUrlWareHouse);
+            wareHouseResponse = await _client.GetAsync(DefaultApiUrlWareHouse + "/GetAllWareHouse");
             string strWareHouse;
 
             var options = new JsonSerializerOptions
@@ -139,6 +140,41 @@ namespace PetStoreClient.Controllers
 
             return View(currentPageWareHouse);
         }
+
+        public async Task<IActionResult> SupperlierList(int page = 1, int pageSize = 10, string supperlierName = "")
+        {
+            //http://localhost:5000/api/Supplier/GetAllSupperlier
+            if (HttpContext.Session.GetString("UserSession") == null)
+                return RedirectToAction("Index", "Login");
+            HttpResponseMessage supperlier;
+            supperlier = await _client.GetAsync(DefaultApiUrlSupperlier + "/GetAllSupperlier");
+            string strSupperlier;
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            strSupperlier = await supperlier.Content.ReadAsStringAsync();
+            List<SupplierDTO> listSupperlier = System.Text.Json.JsonSerializer.Deserialize<List<SupplierDTO>>(strSupperlier, options);
+
+            if (!string.IsNullOrEmpty(supperlierName))
+            {
+                listSupperlier = listSupperlier.Where(c => c.SuppliersName.Contains(supperlierName, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            int totalItems = listSupperlier.Count;
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            int startIndex = (page - 1) * pageSize;
+            List<SupplierDTO> currentSupperlier = listSupperlier.Skip(startIndex).Take(pageSize).ToList();
+
+            ViewBag.TotalPages = totalPages;
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+
+            return View(currentSupperlier);
+        }
+
         public async Task<IActionResult> ProductList(int page = 1, int pageSize = 10, string productName = "")
         {
             if (HttpContext.Session.GetString("UserSession") == null)
@@ -194,7 +230,7 @@ namespace PetStoreClient.Controllers
             ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
             string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
-            if(updateDto.CustomerName == null || updateDto.Address == null || updateDto.Phone == null)
+            if(updateDto.Name == null || updateDto.Address == null || updateDto.Phone == null)
             {
                 return View();
             }
@@ -237,6 +273,33 @@ namespace PetStoreClient.Controllers
 
             return View(productDetail);
         }
+
+        public async Task<IActionResult> WareHouseDetail(int wareHouseId)
+        {
+            if (HttpContext.Session.GetString("UserSession") == null)
+                return RedirectToAction("Index", "Login");
+            //http://localhost:5000/api/Warehouse/GetWareHouseById/1
+
+            HttpResponseMessage productDetailResponse = await _client.GetAsync(DefaultApiUrlWareHouse + "/GetWareHouseById/" + wareHouseId);
+            string strWareHouseDetail;
+            try
+            {
+                strWareHouseDetail = await productDetailResponse.Content.ReadAsStringAsync();
+            }
+            catch (HttpRequestException ex)
+            {
+                return View("Error");
+            }
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            WarehouseDTO wareHouseDetail = System.Text.Json.JsonSerializer.Deserialize<WarehouseDTO>(strWareHouseDetail, options);
+
+            return View(wareHouseDetail);
+        }
+
 
         public async Task<IActionResult> AddProduct(ProductDTO productForm)
         {
@@ -286,6 +349,108 @@ namespace PetStoreClient.Controllers
 
             return View();
         }
+
+        public async Task<IActionResult> AddWareHouse(Warehouse wareHouseForm)
+        {
+            if (HttpContext.Session.GetString("UserSession") == null)
+                return RedirectToAction("Index", "Login");
+
+            if (wareHouseForm.WarehouseName == null || wareHouseForm.Address == null )
+            {
+                ViewBag.ErrorMessage = "WareHouse data is missing.";
+                return View();
+            }
+            //http://localhost:5000/api/Warehouse/AddWareHouse
+
+            var json = NewtonsoftJson.SerializeObject(wareHouseForm);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await _client.PostAsync(DefaultApiUrlWareHouse + "/AddWareHouse", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                ViewBag.SuccessMessage = "WareHouse add is sussess.";
+                return View();
+            }
+
+            return View();
+        }
+
+        public async Task<IActionResult> AddSupperlier(Supplier supplierForm)
+        {
+            if (HttpContext.Session.GetString("UserSession") == null)
+                return RedirectToAction("Index", "Login");
+
+            if (supplierForm.SuppliersName == null || supplierForm.Address == null)
+            {
+                ViewBag.ErrorMessage = "Supplier data is missing.";
+                return View();
+            }
+            //http://localhost:5000/api/Supplier/AddSupperlier
+
+            var json = NewtonsoftJson.SerializeObject(supplierForm);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await _client.PostAsync(DefaultApiUrlSupperlier + "/AddSupperlier", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                ViewBag.SuccessMessage = "Supplier add is sussess.";
+                return View();
+            }
+
+            return View();
+        }
+
+        public async Task<IActionResult> DeleteWareHouse(int wareHouseId)
+        {
+            if (HttpContext.Session.GetString("UserSession") == null)
+                return RedirectToAction("Index", "Login");
+            //http://localhost:5000/api/Warehouse/DeleteWareHouseById?id=4
+            HttpResponseMessage deleteResponse = await _client.DeleteAsync(DefaultApiUrlWareHouse + "/DeleteWareHouseById?id=" + wareHouseId);
+
+            if (!deleteResponse.IsSuccessStatusCode)
+            {
+                return View("Error");
+            }
+
+            return Redirect("/Manager/WareHouse");
+        }
+
+        public async Task<IActionResult> DeleteSuppliers(int suppliersId)
+        {
+            if (HttpContext.Session.GetString("UserSession") == null)
+                return RedirectToAction("Index", "Login");
+
+            //http://localhost:5000/api/Warehouse/DeleteWareHouseById?id=4
+            HttpResponseMessage deleteResponse = await _client.DeleteAsync(DefaultApiUrlSupperlier + "/DeleteSupperlierById?id=" + suppliersId);
+
+            if (!deleteResponse.IsSuccessStatusCode)
+            {
+                return View("Error");
+            }
+
+            return Redirect("/Manager/SupperlierList");
+        }
+
+
+        public async Task<IActionResult> SetActiveAccount(int customerId)
+        {
+            if (HttpContext.Session.GetString("UserSession") == null)
+                return RedirectToAction("Index", "Login");
+
+            var request = new HttpRequestMessage(HttpMethod.Put, DefaultApiUrlCusomer + "/ToggleActive/" + customerId);
+
+            HttpResponseMessage response = await _client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return View();
+            }
+
+            return View();
+        }
+
 
         public IActionResult Dasbroad()
         {

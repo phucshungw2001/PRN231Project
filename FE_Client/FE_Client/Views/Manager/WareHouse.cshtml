@@ -13,6 +13,11 @@
             <input type="text" class="search-input" id="searchWareHouseName" placeholder="Search by WareHouse Name">
             <button class="search-button" id="btnSearch">Search</button>
         </div>
+       <div style="margin-bottom:10px">
+        <a href="AddWareHouse">
+            <button class="add-button">Thêm kho</button>
+        </a>
+       </div>
         @if (Model.Count > 0)
         {
             <table class="customer-table">
@@ -21,6 +26,8 @@
                         <th>No</th>
                         <th>WarehouseName</th>
                         <th>Address</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,6 +37,10 @@
                             <td>@warehouse.WarehouseId</td>
                             <td>@warehouse.WarehouseName</td>
                             <td>@warehouse.Address</td>
+                            <td><a class="detail-link" href="WareHouseDetail?wareHouseId=@warehouse.WarehouseId">Detail</a></td>
+                            <td><a class="detail-link" href="DeleteWareHouse?wareHouseId=@warehouse.WarehouseId">
+                               <button class="btn btn-danger">Delete</button>
+                            </a></td>
                         </tr>
                     }
                 </tbody>
@@ -117,6 +128,23 @@
         cursor: pointer;
     }
 
+    .add-button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #3f51b5;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .add-quantity-button {
+        padding: 5px 10px;
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
     /* Customer table styles */
     .customer-table {
         width: 100%;
@@ -146,6 +174,10 @@
         margin: 0 5px;
     }
 
+    .detail-link {
+        color: #3f51b5;
+        text-decoration: none;
+    }
     .page-link {
         padding: 5px 10px;
         border: 1px solid #ccc;

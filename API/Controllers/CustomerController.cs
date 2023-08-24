@@ -34,6 +34,32 @@ namespace API.Controllers
             return Ok(_mapper.Map<List<AccountInfo>>(accounts));
         }
 
+
+        [HttpPut("ToggleActive/{id}")]
+        public async Task<IActionResult> ToggleAccountStatus(int id)
+        {
+            var existingAccount = await _context.Accounts.Include(a => a.Customer).SingleOrDefaultAsync(a => a.CustomerId == id);
+
+            if (existingAccount == null)
+            {
+                return NotFound("Account not found.");
+            }
+
+            if (existingAccount.IsActive.HasValue)
+            {
+                existingAccount.IsActive = !existingAccount.IsActive.Value;
+
+                _context.Accounts.Update(existingAccount);
+                await _context.SaveChangesAsync();
+
+                return Ok($"Account status updated to {(existingAccount.IsActive.Value ? "active" : "inactive")}.");
+            }
+            else
+            {
+                return BadRequest("Account status is not set.");
+            }
+        }
+
         [HttpPut("editProfile")]
         public async Task<IActionResult> EditProfile(string email, [FromBody] EditProfileForm updateDto)
         {

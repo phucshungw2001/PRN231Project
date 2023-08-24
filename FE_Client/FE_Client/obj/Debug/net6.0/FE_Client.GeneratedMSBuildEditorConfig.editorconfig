@@ -36,8 +36,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxBZGRQcm9kdWN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/AddSupperlier.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxBZGRTdXBwZXJsaWVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/AddWareHouse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxBZGRXYXJlSG91c2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/CustomerList.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxDdXN0b21lckxpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/DeleteSuppliers.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxEZWxldGVTdXBwbGllcnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/DeleteWareHouse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxEZWxldGVXYXJlSG91c2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/EditProfile.cshtml]
@@ -56,8 +72,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxQcm9kdWN0TGlzdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/SetActiveAccount.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxTZXRBY3RpdmVBY2NvdW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/SupperlierList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxTdXBwZXJsaWVyTGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/WareHouse.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxXYXJlSG91c2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/WareHouseDetail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxXYXJlSG91c2VEZXRhaWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Register/Index.cshtml]
