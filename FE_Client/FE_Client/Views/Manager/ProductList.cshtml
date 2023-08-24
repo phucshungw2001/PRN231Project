@@ -8,14 +8,12 @@
 <html>
 <head>
     <title>@ViewData["Title"]</title>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
     <h1>Product list</h1>
-    @*<div class="search-form">
-    <input type="text" class="search-input" id="searchProductName" placeholder="Search by Product Name">
-    <button class="search-button" id="btnSearch">Search</button>
-    </div>*@
     <div class="search-form">
         <input type="text" class="search-input" id="searchProductName" placeholder="Search by Product Name">
         <button class="search-button" onclick="searchProducts()">Search</button>
@@ -185,12 +183,7 @@
             function showQuantityHistory(productId) {
                 var url = `http://localhost:5000/api/Product/GetQuantityHistory?productId=${productId}`;
 
-                fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
+                fetch(url)
                     .then(response => response.json())
                     .then(history => {
                         showQuantityDetailModal(productId, history);
@@ -199,23 +192,24 @@
             }
 
             function showQuantityDetailModal(productId, history) {
-                var modalContent = "<h5>Quantity Detail for Product ID " + productId + "</h5>";
-                modalContent += "<ul>";
+                var modalContent = "<h5>Lịch sử Số lượng cho Sản phẩm có ID " + productId + "</h5>";
+                modalContent += "<table class='table'>";
+                modalContent += "<thead><tr><th>Action</th><th>Change</th><th>Date</th></tr></thead>";
+                modalContent += "<tbody>";
 
                 history.forEach(item => {
-                    var change = item.change >= 0 ? "+" + item.change : item.change;
-                    modalContent += "<li>" + item.date + ": " + change + "</li>";
+                    modalContent += "<tr>";
+                    modalContent += "<td>" + item.action + "</td>";
+                    modalContent += "<td>" + item.change + "</td>";
+                    modalContent += "<td>" + item.date + "</td>";
+                    modalContent += "</tr>";
                 });
 
-                modalContent += "</ul>";
+                modalContent += "</tbody></table>";
 
-                var modal = document.createElement("div");
-                modal.innerHTML = modalContent;
-
-                $("#quantityDetailModalContent_" + productId).html(modal);
+                $("#quantityDetailModalContent_" + productId).html(modalContent);
                 $("#quantityDetailModal_" + productId).modal("show");
             }
-
         </script>
 }
     <style>

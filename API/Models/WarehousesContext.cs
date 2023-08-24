@@ -23,6 +23,7 @@ namespace API.Models
         public virtual DbSet<InvoiceDetail> InvoiceDetails { get; set; } = null!;
         public virtual DbSet<Manager> Managers { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
+        public virtual DbSet<QuantityChangeHistory> QuantityChangeHistories { get; set; } = null!;
         public virtual DbSet<ReceiptDetail> ReceiptDetails { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<StockReceipt> StockReceipts { get; set; } = null!;
@@ -173,14 +174,42 @@ namespace API.Models
                     .HasConstraintName("FK_Products_Suppliers");
 
                 entity.HasOne(d => d.Warehouse)
-                    .WithMany(p => p.Products)
+                    .WithMany(p => p.ProductsNavigation)
                     .HasForeignKey(d => d.WarehouseId)
-                    .HasConstraintName("FK_Products_Warehouses1");
+                    .HasConstraintName("FK_Products_Warehouses");
+
+                entity.HasMany(d => d.Warehouses)
+                    .WithMany(p => p.Products)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "ProdcutsWarehouse",
+                        l => l.HasOne<Warehouse>().WithMany().HasForeignKey("WarehouseId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Prodcuts_Warehouses_Warehouses"),
+                        r => r.HasOne<Product>().WithMany().HasForeignKey("ProductId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Prodcuts_Warehouses_Products"),
+                        j =>
+                        {
+                            j.HasKey("ProductId", "WarehouseId");
+
+                            j.ToTable("Prodcuts_Warehouses");
+
+                            j.IndexerProperty<int>("ProductId").HasColumnName("ProductID");
+
+                            j.IndexerProperty<int>("WarehouseId").HasColumnName("WarehouseID");
+                        });
+            });
+
+            modelBuilder.Entity<QuantityChangeHistory>(entity =>
+            {
+                entity.ToTable("QuantityChangeHistory");
+
+                entity.Property(e => e.Action).HasMaxLength(50);
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<ReceiptDetail>(entity =>
             {
-                entity.Property(e => e.ReceiptDetailId).HasColumnName("ReceiptDetailID");
+                entity.Property(e => e.ReceiptDetailId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ReceiptDetailID");
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
@@ -212,7 +241,9 @@ namespace API.Models
             {
                 entity.HasKey(e => e.ReceiptId);
 
-                entity.Property(e => e.ReceiptId).HasColumnName("ReceiptID");
+                entity.Property(e => e.ReceiptId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ReceiptID");
 
                 entity.Property(e => e.DateReceipt).HasColumnType("date");
 
