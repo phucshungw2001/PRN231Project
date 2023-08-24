@@ -33,7 +33,19 @@ namespace API.Controllers
             return Ok(_mapper.Map<List<ProductDTO>>(products));
         }
 
-       
+        [HttpGet("GetProductByProductName")]
+        public IActionResult GetProductByProductName(string productName)
+        {
+            List<Product> products = _context.Products.Where(p => p.ProductName.Contains(productName)).ToList();
+
+            if (products.Count == 0)
+            {
+                return NotFound("No products found with the given product name.");
+            }
+
+            return Ok(_mapper.Map<List<ProductDTO>>(products));
+        }
+
 
         [HttpPost("AddProduct")]
         public IActionResult Add(Product product)

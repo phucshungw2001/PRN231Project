@@ -22,6 +22,7 @@ namespace PetStoreClient.Controllers
         private string DefaultApiUrlProductList = "";
         private string DefaultApiUrlProductDetail = "";
         private string DefaultApiUrlEmployee = "";
+        private string DefaultApiUrlWareHouse = "";
 
         public ManagerController()
         {
@@ -33,6 +34,7 @@ namespace PetStoreClient.Controllers
             DefaultApiUrlProductList = "http://localhost:5000/api/Product";
             DefaultApiUrlProductDetail = "http://localhost:5000/api/Product/GetProductById";
             DefaultApiUrlEmployee = "http://localhost:5000/api/Manager";
+            DefaultApiUrlWareHouse = "http://localhost:5000/api/Warehouse/GetAllWareHouse";
 
         }
         public async Task<IActionResult> Index()
@@ -104,8 +106,39 @@ namespace PetStoreClient.Controllers
 
              return View(currentPageCustomer);
          }
-       
 
+        public async Task<IActionResult> WareHouse(int page = 1, int pageSize = 10, string wareHouseName = "")
+        {
+            if (HttpContext.Session.GetString("UserSession") == null)
+                return RedirectToAction("Index", "Login");
+            HttpResponseMessage wareHouseResponse;
+            wareHouseResponse = await _client.GetAsync(DefaultApiUrlWareHouse);
+            string strWareHouse;
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            strWareHouse = await wareHouseResponse.Content.ReadAsStringAsync();
+            List<WarehouseDTO> listWareHouse = System.Text.Json.JsonSerializer.Deserialize<List<WarehouseDTO>>(strWareHouse, options);
+
+            if (!string.IsNullOrEmpty(wareHouseName))
+            {
+                listWareHouse = listWareHouse.Where(c => c.WarehouseName.Contains(wareHouseName, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            int totalItems = listWareHouse.Count;
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            int startIndex = (page - 1) * pageSize;
+            List<WarehouseDTO> currentPageWareHouse = listWareHouse.Skip(startIndex).Take(pageSize).ToList();
+
+            ViewBag.TotalPages = totalPages;
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+
+            return View(currentPageWareHouse);
+        }
         public async Task<IActionResult> ProductList(int page = 1, int pageSize = 10, string productName = "")
         {
             if (HttpContext.Session.GetString("UserSession") == null)
