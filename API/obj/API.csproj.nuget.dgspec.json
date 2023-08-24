@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Desktop\\PRN231Project\\API\\API.csproj": {}
+    "D:\\FULearning\\Summer2023\\PRN231_BL5\\PRN231Project\\API\\API.csproj": {}
   },
   "projects": {
-    "E:\\Desktop\\PRN231Project\\API\\API.csproj": {
+    "D:\\FULearning\\Summer2023\\PRN231_BL5\\PRN231Project\\API\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Desktop\\PRN231Project\\API\\API.csproj",
+        "projectUniqueName": "D:\\FULearning\\Summer2023\\PRN231_BL5\\PRN231Project\\API\\API.csproj",
         "projectName": "API",
-        "projectPath": "E:\\Desktop\\PRN231Project\\API\\API.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "E:\\Desktop\\PRN231Project\\API\\obj\\",
+        "projectPath": "D:\\FULearning\\Summer2023\\PRN231_BL5\\PRN231Project\\API\\API.csproj",
+        "packagesPath": "C:\\Users\\VanHung\\.nuget\\packages\\",
+        "outputPath": "D:\\FULearning\\Summer2023\\PRN231_BL5\\PRN231Project\\API\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\VanHung\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -94,7 +98,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.408\\RuntimeIdentifierGraph.json"
         }
       }
     }

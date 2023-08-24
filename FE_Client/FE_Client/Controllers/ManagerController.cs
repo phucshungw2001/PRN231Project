@@ -87,21 +87,21 @@ namespace PetStoreClient.Controllers
 
              return View(currentPageCustomer);
          }*/
+       
 
         public async Task<IActionResult> ProductList(int page = 1, int pageSize = 10, string productName = "")
         {
             if (HttpContext.Session.GetString("UserSession") == null)
                 return RedirectToAction("Index", "Login");
-            HttpResponseMessage productResponse;
-            productResponse = await _client.GetAsync(DefaultApiUrlProductList);
-            string strProduct;
+
+            HttpResponseMessage productResponse = await _client.GetAsync(DefaultApiUrlProductList);
+            string strProduct = await productResponse.Content.ReadAsStringAsync();
 
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             };
 
-            strProduct = await productResponse.Content.ReadAsStringAsync();
             List<ProductDTO> listProducts = JsonSerializer.Deserialize<List<ProductDTO>>(strProduct, options);
 
             if (!string.IsNullOrEmpty(productName))
@@ -112,13 +112,28 @@ namespace PetStoreClient.Controllers
             int totalItems = listProducts.Count;
             int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
             int startIndex = (page - 1) * pageSize;
-            List<ProductDTO> currentPageCustomer = listProducts.Skip(startIndex).Take(pageSize).ToList();
+            List<ProductDTO> currentPageProducts = listProducts.Skip(startIndex).Take(pageSize).ToList();
+
+            // Adjust quantity by subtracting 500
+            foreach (var product in currentPageProducts)
+            {
+                if (product.Quantity.HasValue) // Kiểm tra Quantity có giá trị không
+                {
+                    product.Quantity = Math.Max(product.Quantity.Value - 500, 0);
+                }
+                else
+                {
+                    // Xử lý khi Quantity là null, ví dụ:
+                    product.Quantity = 0; // Gán giá trị mặc định
+                }
+            }
 
             ViewBag.TotalPages = totalPages;
             ViewBag.CurrentPage = page;
             ViewBag.PageSize = pageSize;
 
-            return View(currentPageCustomer);
+            return View(currentPageProducts);
         }
+
     }
 }
