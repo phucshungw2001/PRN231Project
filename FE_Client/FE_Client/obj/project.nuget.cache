@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "QJY0BH9vBkib1iEFod/p6NnlyQJs1lC0h8xAQbCtPtLHHDepmSID7ZHEoRk33Ek6saxPzgqsjgRm+SPJO448SQ==",
+  "dgSpecHash": "ww4QICyU+BSABPWBIq37iEDJbWaJWXMQTYp8a87gw7dBycgYWSGlfwdm6cWa3G3FQsixKho9VJBTu5WR+9wncw==",
   "success": true,
-  "projectFilePath": "D:\\FULearning\\Summer2023\\PRN231_BL5\\PRN231Project\\FE_Client\\FE_Client\\FE_Client.csproj",
+  "projectFilePath": "C:\\Users\\VanHung\\Desktop\\New folder\\PRN231Project\\FE_Client\\FE_Client\\FE_Client.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\VanHung\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\VanHung\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.20\\microsoft.aspnetcore.authentication.jwtbearer.6.0.20.nupkg.sha512",

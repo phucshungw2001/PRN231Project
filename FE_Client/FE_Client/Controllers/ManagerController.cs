@@ -287,5 +287,15 @@ namespace PetStoreClient.Controllers
             return View();
         }
 
+        public IActionResult Dasbroad()
+        {
+            if (HttpContext.Session.GetString("UserSession") == null)
+                return RedirectToAction("Index", "Login");
+
+            // Các xử lý liên quan đến trang Dasbroad ở đây
+            // Ví dụ: bạn có thể chuẩn bị dữ liệu cần thiết cho trang và trả về View
+
+            return View();
+        }
     }
 }

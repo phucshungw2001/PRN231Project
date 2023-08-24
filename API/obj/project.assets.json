@@ -2671,11 +2671,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\FULearning\\Summer2023\\PRN231_BL5\\PRN231Project\\API\\API.csproj",
+      "projectUniqueName": "C:\\Users\\VanHung\\Desktop\\New folder\\PRN231Project\\API\\API.csproj",
       "projectName": "API",
-      "projectPath": "D:\\FULearning\\Summer2023\\PRN231_BL5\\PRN231Project\\API\\API.csproj",
+      "projectPath": "C:\\Users\\VanHung\\Desktop\\New folder\\PRN231Project\\API\\API.csproj",
       "packagesPath": "C:\\Users\\VanHung\\.nuget\\packages\\",
-      "outputPath": "D:\\FULearning\\Summer2023\\PRN231_BL5\\PRN231Project\\API\\obj\\",
+      "outputPath": "C:\\Users\\VanHung\\Desktop\\New folder\\PRN231Project\\API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
