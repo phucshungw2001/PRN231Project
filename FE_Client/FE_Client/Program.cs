@@ -4,6 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddCors();
 
 // Add session and time
 builder.Services.AddDistributedMemoryCache();
@@ -29,6 +30,12 @@ else
 {
     app.UseExceptionHandler("/Home/Error");
 }
+app.UseCors(builder =>
+{
+    builder.AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod();
+});
 
 app.UseStaticFiles();
 

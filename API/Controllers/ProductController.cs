@@ -33,6 +33,8 @@ namespace API.Controllers
             return Ok(_mapper.Map<List<ProductDTO>>(products));
         }
 
+       
+
         [HttpPost("AddProduct")]
         public IActionResult Add(Product product)
         {
@@ -65,6 +67,26 @@ namespace API.Controllers
             _context.SaveChanges();
             return Ok(products);
         }
+
+        [HttpPut("UpdateQuantityProduct")]
+        public IActionResult UpdateQuantityProduct(int productId, int newQuantity)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.ProductId == productId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            // Thực hiện cộng thêm newQuantity vào số lượng hiện tại của sản phẩm
+            product.Quantity += newQuantity;
+
+            _context.Entry(product).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return Ok(_mapper.Map<ProductDTO>(product));
+        }
+
+
 
 
         [HttpPut("{ChangeStatusProductId}")]
@@ -104,5 +126,50 @@ namespace API.Controllers
             _context.SaveChanges();
             return Ok(product);
         }
+
+        /*[HttpPut("DeleteQuantityProduct")]
+        public IActionResult DeleteQuantityProduct(int productId, int deletedQuantity)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.ProductId == productId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            // Kiểm tra số lượng cần xoá có lớn hơn hoặc bằng số lượng hiện có không
+            if (deletedQuantity <= product.Quantity)
+            {
+                product.Quantity -= deletedQuantity; // Trừ đi deletedQuantity
+
+                _context.Entry(product).State = EntityState.Modified;
+                _context.SaveChanges();
+
+                return Ok(_mapper.Map<ProductDTO>(product));
+            }
+            else
+            {
+                return BadRequest("Deleted quantity exceeds current quantity.");
+            }
+        }*/
+
+        [HttpPut("DeleteQuantityProduct")]
+        public IActionResult DeleteQuantityProduct(int productId, int deletedQuantity)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.ProductId == productId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            if (deletedQuantity > 0 && deletedQuantity <= product.Quantity)
+            {
+                product.Quantity -= deletedQuantity;
+                _context.Entry(product).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
+
+            return Ok(_mapper.Map<ProductDTO>(product));
+        }
+
     }
 }
