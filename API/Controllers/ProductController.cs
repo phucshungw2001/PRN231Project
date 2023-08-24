@@ -46,6 +46,16 @@ namespace API.Controllers
             return Ok(_mapper.Map<List<ProductDTO>>(products));
         }
 
+        [HttpGet("GetQuantityHistory")]
+        public IActionResult GetQuantityHistory(int productId)
+        {
+            var history = _context.QuantityChangeHistories
+                .Where(h => h.ProductId == productId)
+                .OrderByDescending(h => h.Date)
+                .ToList();
+
+            return Ok(history);
+        }
 
         [HttpPost("AddProduct")]
         public IActionResult Add(Product product)
@@ -89,17 +99,23 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            // Thực hiện cộng thêm newQuantity vào số lượng hiện tại của sản phẩm
+            var oldQuantity = product.Quantity;
             product.Quantity += newQuantity;
+
+            // Thêm thông tin vào lịch sử
+            AddQuantityHistoryEntry(productId, "Update", newQuantity);
 
             _context.Entry(product).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return Ok(_mapper.Map<ProductDTO>(product));
+            var resultDTO = new QuantityUpdateResultDTO
+            {
+                NewQuantity = newQuantity,
+                ExecutionTime = DateTime.UtcNow
+            };
+
+            return Ok(resultDTO);
         }
-
-
-
 
         [HttpPut("{ChangeStatusProductId}")]
         public async Task<IActionResult> UpdateOrderStatus(int ChangeStatusProductId)
@@ -139,31 +155,6 @@ namespace API.Controllers
             return Ok(product);
         }
 
-        /*[HttpPut("DeleteQuantityProduct")]
-        public IActionResult DeleteQuantityProduct(int productId, int deletedQuantity)
-        {
-            var product = _context.Products.FirstOrDefault(p => p.ProductId == productId);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            // Kiểm tra số lượng cần xoá có lớn hơn hoặc bằng số lượng hiện có không
-            if (deletedQuantity <= product.Quantity)
-            {
-                product.Quantity -= deletedQuantity; // Trừ đi deletedQuantity
-
-                _context.Entry(product).State = EntityState.Modified;
-                _context.SaveChanges();
-
-                return Ok(_mapper.Map<ProductDTO>(product));
-            }
-            else
-            {
-                return BadRequest("Deleted quantity exceeds current quantity.");
-            }
-        }*/
-
         [HttpPut("DeleteQuantityProduct")]
         public IActionResult DeleteQuantityProduct(int productId, int deletedQuantity)
         {
@@ -175,12 +166,42 @@ namespace API.Controllers
 
             if (deletedQuantity > 0 && deletedQuantity <= product.Quantity)
             {
+                var oldQuantity = product.Quantity;
                 product.Quantity -= deletedQuantity;
+
+                // Thêm thông tin vào lịch sử
+                AddQuantityHistoryEntry(productId, "Delete", deletedQuantity);
+
                 _context.Entry(product).State = EntityState.Modified;
                 _context.SaveChanges();
-            }
 
-            return Ok(_mapper.Map<ProductDTO>(product));
+                var resultDTO = new QuantityUpdateResultDTO
+                {
+                    NewQuantity = -deletedQuantity,
+                    ExecutionTime = DateTime.UtcNow
+                };
+
+                return Ok(resultDTO);
+            }
+            else
+            {
+                return BadRequest("Deleted quantity exceeds current quantity.");
+            }
+        }
+
+        private void AddQuantityHistoryEntry(int productId, string action, int change)
+        {
+            // Tạo một đối tượng lịch sử
+            var historyEntry = new QuantityChangeHistory
+            {
+                ProductId = productId,
+                Action = action,
+                Change = change,
+                Date = DateTime.UtcNow
+            };
+            // Thêm vào cơ sở dữ liệu hoặc cơ chế lưu trữ khác
+            _context.QuantityChangeHistories.Add(historyEntry);
+            _context.SaveChanges();
         }
 
     }
