@@ -12,194 +12,207 @@
 </head>
 <body>
     <h1>Product list</h1>
+    @*<div class="search-form">
+    <input type="text" class="search-input" id="searchProductName" placeholder="Search by Product Name">
+    <button class="search-button" id="btnSearch">Search</button>
+    </div>*@
     <div class="search-form">
         <input type="text" class="search-input" id="searchProductName" placeholder="Search by Product Name">
-        <button class="search-button" id="btnSearch">Search</button>
+        <button class="search-button" onclick="searchProducts()">Search</button>
     </div>
-    @if (Model.Count > 0)
-    {
-        <table class="table product-table">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Product Name</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Status</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var product in Model)
-                {
-                    <tr>
-                        <td>@product.ProductId</td>
-                        <td>@product.ProductName</td>
-                        <td>@product.Quantity</td>
-                        <td>@product.Price</td>
-                        <td>
-                            @if (product.Status==true)
-                            {
-                                <span class="status available">Available</span>
-                            }
-                            else
-                            {
-                                <span class="status sold-out">Sold Out</span>
-                            }
-                        </td>
-                        <td><a class="detail-link" href="ProductDetail?productId=@product.ProductId">Detail</a></td>
-                        <td>
-                            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addQuantityModal_@product.ProductId">Add Quantity</a>
-                        </td>
-                        <td>
-                            <a href="javascript:void(0);" class="detail-link" onclick="showQuantityHistory(@product.ProductId)">Detail Quantity</a>
-                        </td>
-                    </tr>
-                    <div class="modal fade" id="addQuantityModal_@product.ProductId" tabindex="-1" role="dialog" aria-labelledby="addQuantityModalLabel_@product.ProductId" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="addQuantityModalLabel_@product.ProductId">Add Quantity for @product.ProductName</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="number" id="quantityInput_@product.ProductId" class="form-control" placeholder="Enter quantity">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary" onclick="addQuantity(@product.ProductId)">Add</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal fade" id="quantityDetailModal_@product.ProductId" tabindex="-1" role="dialog" aria-labelledby="quantityDetailModalLabel_@product.ProductId" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="quantityDetailModalLabel_@product.ProductId">Quantity Detail for @product.ProductName</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body" id="quantityDetailModalContent_@product.ProductId">
-                                    <!-- Lịch sử thay đổi số lượng sẽ được hiển thị tại đây -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </tbody>
-        </table>
-        @if (ViewBag.TotalPages > 1)
+    <div id="productListDiv">
+        @if (Model.Count > 0)
         {
-            <ul class="pagination">
-                @if (ViewBag.CurrentPage > 1)
-                {
-                    <li class="page-item">
-                        <a class="page-link" href="@Url.Action("ProductList", new { page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">Previous</a>
-                    </li>
-                }
+            <table class="table product-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody >
+                    @foreach (var product in Model)
+                    {
+                        <tr>
+                            <td>@product.ProductId</td>
+                            <td>@product.ProductName</td>
+                            <td>@product.Quantity</td>
+                            <td>@product.Price</td>
+                            <td>
+                                @if (product.Status == true)
+                                {
+                                    <span class="status available">Available</span>
+                                }
+                                else
+                                {
+                                    <span class="status sold-out">Sold Out</span>
+                                }
+                            </td>
+                            <td><a class="detail-link" href="ProductDetail?productId=@product.ProductId">Detail</a></td>
+                            <td>
+                                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addQuantityModal_@product.ProductId">Add Quantity</a>
+                            </td>
+                            <td>
+                                <a href="javascript:void(0);" class="detail-link" onclick="showQuantityHistory(@product.ProductId)">Detail Quantity</a>
+                            </td>
+                        </tr>
+                        <div class="modal fade" id="addQuantityModal_@product.ProductId" tabindex="-1" role="dialog" aria-labelledby="addQuantityModalLabel_@product.ProductId" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addQuantityModalLabel_@product.ProductId">Add Quantity for @product.ProductName</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="number" id="quantityInput_@product.ProductId" class="form-control" placeholder="Enter quantity">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" onclick="addQuantity(@product.ProductId)">Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                {
-                    <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
-                        <a class="page-link" href="@Url.Action("ProductList", new { page = i, pageSize = ViewBag.PageSize })">@i</a>
-                    </li>
-                }
+                        <div class="modal fade" id="quantityDetailModal_@product.ProductId" tabindex="-1" role="dialog" aria-labelledby="quantityDetailModalLabel_@product.ProductId" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="quantityDetailModalLabel_@product.ProductId">Quantity Detail for @product.ProductName</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" id="quantityDetailModalContent_@product.ProductId">
+                                        <!-- Lịch sử thay đổi số lượng sẽ được hiển thị tại đây -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </tbody>
+            </table>
+            @if (ViewBag.TotalPages > 1)
+            {
+                <ul class="pagination">
+                    @if (ViewBag.CurrentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("ProductList", new { page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">Previous</a>
+                        </li>
+                    }
 
-                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
-                {
-                    <li class="page-item">
-                        <a class="page-link" href="@Url.Action("ProductList", new { page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">Next</a>
-                    </li>
-                }
-            </ul>
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("ProductList", new { page = i, pageSize = ViewBag.PageSize })">@i</a>
+                        </li>
+                    }
+
+                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("ProductList", new { page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">Next</a>
+                        </li>
+                    }
+                </ul>
+            }
         }
-    }
-    else
-    {
-        <p>No products found.</p>
-    }
-
+        else
+        {
+            <p>No products found.</p>
+        }
+    </div>
     @section Scripts {
         <script>
-            document.getElementById("btnSearch").addEventListener("click", function () {
+            function searchProducts() {
                 var searchProductName = document.getElementById("searchProductName").value;
-                var url = "@Url.Action("ProductList")?page=1&pageSize=@ViewBag.PageSize&searchProductName=" + searchProductName;
-                window.location.href = url;
-            });
+                var apiUrl = `http://localhost:5000/api/Product/GetProductByProductName?productName=${searchProductName}`;
+
+                fetch(apiUrl)
+                    .then(response => response.text())
+                    .then(html => {
+                        var productListDiv = document.getElementById("productListDiv");
+                        productListDiv.innerHTML = html;  // Replace the productListDiv content with search results
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
         </script>
-    <script>
-        function addQuantity(productId) {
-            var quantity = parseInt(document.getElementById("quantityInput_" + productId).value);
-            if (!isNaN(quantity) && quantity > 0) {
-                var url = `http://localhost:5000/api/Product/UpdateQuantityProduct?productId=${productId}&newQuantity=${quantity}`;
+        <script>
+            function addQuantity(productId) {
+                var quantity = parseInt(document.getElementById("quantityInput_" + productId).value);
+                if (!isNaN(quantity) && quantity > 0) {
+                    var url = `http://localhost:5000/api/Product/UpdateQuantityProduct?productId=${productId}&newQuantity=${quantity}`;
+
+                    fetch(url, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(result => {
+                            updateProductRow(productId, result.Quantity);
+                        })
+                        .catch(error => console.error('Error:', error));
+                }
+            }
+
+            function updateProductRow(productId, newQuantity) {
+                var quantityColumn = document.getElementById("quantity_" + productId);
+
+                if (quantityColumn) {
+                    quantityColumn.textContent = newQuantity;
+                    $("#addQuantityModal_" + productId).modal("hide");
+                } else {
+                    console.error("Element with ID 'quantity_" + productId + "' not found.");
+                }
+            }
+
+            function showQuantityHistory(productId) {
+                var url = `http://localhost:5000/api/Product/GetQuantityHistory?productId=${productId}`;
 
                 fetch(url, {
-                    method: 'PUT',
+                    method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 })
                     .then(response => response.json())
-                    .then(result => {
-                        updateProductRow(productId, result.Quantity);
+                    .then(history => {
+                        showQuantityDetailModal(productId, history);
                     })
                     .catch(error => console.error('Error:', error));
             }
-        }
 
-        function updateProductRow(productId, newQuantity) {
-            var quantityColumn = document.getElementById("quantity_" + productId);
+            function showQuantityDetailModal(productId, history) {
+                var modalContent = "<h5>Quantity Detail for Product ID " + productId + "</h5>";
+                modalContent += "<ul>";
 
-            if (quantityColumn) {
-                quantityColumn.textContent = newQuantity;
-                $("#addQuantityModal_" + productId).modal("hide");
-            } else {
-                console.error("Element with ID 'quantity_" + productId + "' not found.");
+                history.forEach(item => {
+                    var change = item.change >= 0 ? "+" + item.change : item.change;
+                    modalContent += "<li>" + item.date + ": " + change + "</li>";
+                });
+
+                modalContent += "</ul>";
+
+                var modal = document.createElement("div");
+                modal.innerHTML = modalContent;
+
+                $("#quantityDetailModalContent_" + productId).html(modal);
+                $("#quantityDetailModal_" + productId).modal("show");
             }
-        }
 
-        function showQuantityHistory(productId) {
-            var url = `http://localhost:5000/api/Product/GetQuantityHistory?productId=${productId}`;
-
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => response.json())
-                .then(history => {
-                    showQuantityDetailModal(productId, history);
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        function showQuantityDetailModal(productId, history) {
-            var modalContent = "<h5>Quantity Detail for Product ID " + productId + "</h5>";
-            modalContent += "<ul>";
-
-            history.forEach(item => {
-                var change = item.change >= 0 ? "+" + item.change : item.change;
-                modalContent += "<li>" + item.date + ": " + change + "</li>";
-            });
-
-            modalContent += "</ul>";
-
-            var modal = document.createElement("div");
-            modal.innerHTML = modalContent;
-
-            $("#quantityDetailModalContent_" + productId).html(modal);
-            $("#quantityDetailModal_" + productId).modal("show");
-        }
-
-    </script>}
+        </script>
+}
     <style>
         /* Reset some default styles */
         body, h1, h2, h3, p {
