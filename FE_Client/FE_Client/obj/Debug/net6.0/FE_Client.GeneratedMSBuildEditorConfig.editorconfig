@@ -5,80 +5,89 @@ build_property.UsingMicrosoftNETSdkWeb = true
 build_property.ProjectTypeGuids = 
 build_property.InvariantGlobalization = 
 build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = FE_Client
 build_property.RootNamespace = FE_Client
-build_property.ProjectDir = D:\FULearning\Summer2023\PRN231_BL5\Project\PRN231Project\FE_Client\FE_Client\
+build_property.ProjectDir = E:\Desktop\PRN231Project\FE_Client\FE_Client\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\FULearning\Summer2023\PRN231_BL5\Project\PRN231Project\FE_Client\FE_Client
+build_property.MSBuildProjectDirectory = E:\Desktop\PRN231Project\FE_Client\FE_Client
 build_property._RazorSourceGeneratorDebug = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/Home/Index.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/Home/Privacy.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/Login/Index.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Login/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/Logout/Index.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Logout/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9nb3V0XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/Manager/CustomerList.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/AddProduct.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxBZGRQcm9kdWN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/CustomerList.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxDdXN0b21lckxpc3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/Manager/EditProfile.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/EditProfile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxFZGl0UHJvZmlsZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/Manager/Index.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/Manager/ProductDetail.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/ProductDetail.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxQcm9kdWN0RGV0YWlsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/Manager/ProductList.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/ProductList.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxQcm9kdWN0TGlzdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/Shared/Error.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Manager/WareHouse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxXYXJlSG91c2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/Shared/_LayoutHome.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Shared/_LayoutHome.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRIb21lLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/Shared/_LayoutManager.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Shared/_LayoutManager.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRNYW5hZ2VyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/Shared/_LayoutSignIn.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Shared/_LayoutSignIn.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRTaWduSW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/Shared/_ValidationScriptsPartial.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/_ViewImports.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/_ViewStart.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FULearning/Summer2023/PRN231_BL5/Project/PRN231Project/FE_Client/FE_Client/Views/Shared/_Layout.cshtml]
+[E:/Desktop/PRN231Project/FE_Client/FE_Client/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-2t2gh6s6hf

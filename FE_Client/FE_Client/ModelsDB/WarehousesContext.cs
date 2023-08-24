@@ -37,7 +37,7 @@ namespace API.Models
                 if (!optionsBuilder.IsConfigured)
                 {
                     optionsBuilder.UseSqlServer(conf.GetConnectionString("DbConnection"));
-                } 
+                }
             }
         }
 
@@ -173,26 +173,9 @@ namespace API.Models
                     .HasConstraintName("FK_Products_Suppliers");
 
                 entity.HasOne(d => d.Warehouse)
-                    .WithMany(p => p.ProductsNavigation)
-                    .HasForeignKey(d => d.WarehouseId)
-                    .HasConstraintName("FK_Products_Warehouses");
-
-                entity.HasMany(d => d.Warehouses)
                     .WithMany(p => p.Products)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "ProdcutsWarehouse",
-                        l => l.HasOne<Warehouse>().WithMany().HasForeignKey("WarehouseId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Prodcuts_Warehouses_Warehouses"),
-                        r => r.HasOne<Product>().WithMany().HasForeignKey("ProductId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Prodcuts_Warehouses_Products"),
-                        j =>
-                        {
-                            j.HasKey("ProductId", "WarehouseId");
-
-                            j.ToTable("Prodcuts_Warehouses");
-
-                            j.IndexerProperty<int>("ProductId").HasColumnName("ProductID");
-
-                            j.IndexerProperty<int>("WarehouseId").HasColumnName("WarehouseID");
-                        });
+                    .HasForeignKey(d => d.WarehouseId)
+                    .HasConstraintName("FK_Products_Warehouses1");
             });
 
             modelBuilder.Entity<ReceiptDetail>(entity =>

@@ -20,6 +20,11 @@
         <input type="text" class="search-input" id="searchProductName" placeholder="Search by Product Name">
         <button class="search-button" onclick="searchProducts()">Search</button>
     </div>
+    <div style="margin-bottom:10px"> 
+        <a href="AddProduct">
+            <button class="add-button">Thêm sản phẩm</button>
+        </a>
+    </div>
     <div id="productListDiv">
         @if (Model.Count > 0)
         {
@@ -320,6 +325,67 @@
                 border: 1px solid #3f51b5;
             }
 
+        .add-button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #3f51b5;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-quantity-button {
+            padding: 5px 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Status styles */
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .available {
+            background-color: #4caf50;
+            color: #fff;
+        }
+
+        .sold-out {
+            background-color: #f44336;
+            color: #fff;
+        }
+
+        /* Pagination styles */
+        .pagination {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .page-item {
+            margin: 0 5px;
+        }
+
+        .page-link {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            text-decoration: none;
+            color: #333;
+            border-radius: 5px;
+        }
+
+            .page-link.active {
+                background-color: #3f51b5;
+                color: #fff;
+                border: 1px solid #3f51b5;
+            }
     </style>
 </body>
 </html>
