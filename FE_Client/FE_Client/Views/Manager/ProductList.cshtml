@@ -18,9 +18,9 @@
         <input type="text" class="search-input" id="searchProductName" placeholder="Search by Product Name">
         <button class="search-button" onclick="searchProducts()">Search</button>
     </div>
-    <div style="margin-bottom:10px"> 
+    <div style="margin-bottom:10px">
         <a href="AddProduct">
-            <button class="add-button">Thêm sản phẩm</button>
+            <button class="add-button">Nhập hàng</button>
         </a>
     </div>
     <div id="productListDiv">
@@ -37,12 +37,14 @@
                         <th></th>
                         <th></th>
                         <th></th>
+                        <th></th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
-                <tbody >
+                <tbody>
                     @foreach (var product in Model)
                     {
-                        <tr>
+                        <tr id="productRow_@product.ProductId">
                             <td>@product.ProductId</td>
                             <td>@product.ProductName</td>
                             <td>@product.Quantity</td>
@@ -63,6 +65,13 @@
                             </td>
                             <td>
                                 <a href="javascript:void(0);" class="detail-link" onclick="showQuantityHistory(@product.ProductId)">Detail Quantity</a>
+
+                            </td>
+                            <td>
+                                <a href="javascript:void(0);" class="detail-link" onclick="showDashboard(@product.ProductId)">Dashboard</a>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger" onclick="deleteProduct(@product.ProductId)">Delete</button>
                             </td>
                         </tr>
                         <div class="modal fade" id="addQuantityModal_@product.ProductId" tabindex="-1" role="dialog" aria-labelledby="addQuantityModalLabel_@product.ProductId" aria-hidden="true">
@@ -96,6 +105,22 @@
                                     </div>
                                     <div class="modal-body" id="quantityDetailModalContent_@product.ProductId">
                                         <!-- Lịch sử thay đổi số lượng sẽ được hiển thị tại đây -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="dashboardModal_@product.ProductId" tabindex="-1" role="dialog" aria-labelledby="dashboardModalLabel_@product.ProductId" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="dashboardModalLabel_@product.ProductId">Dashboard for @product.ProductName</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <canvas id="dashboardChart_@product.ProductId" width="400" height="200"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -147,6 +172,30 @@
                         productListDiv.innerHTML = html;  // Replace the productListDiv content with search results
                     })
                     .catch(error => console.error('Error:', error));
+            }
+        </script>
+        <script>
+            function deleteProduct(productId) {
+                console.log("Deleting product with ID:", productId);
+                if (confirm("Are you sure you want to delete this product?")) {
+                    var url = `http://localhost:5000/api/Product/DeleteProductById?id=${productId}`;
+
+                    fetch(url, {
+                        method: 'DELETE'
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                // Remove the row from the table if the delete request was successful
+                                var row = document.querySelector(`#productRow_${productId}`);
+                                if (row) {
+                                    row.remove();
+                                }
+                            } else {
+                                console.error('Delete request failed:', response.status);
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                }
             }
         </script>
         <script>
@@ -211,7 +260,80 @@
                 $("#quantityDetailModal_" + productId).modal("show");
             }
         </script>
-}
+        <script>
+            function showDashboard(productId) {
+                var url = `http://localhost:5000/api/Product/GetQuantityHistory?productId=${productId}`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(history => {
+                        var labels = history.map(item => item.date);
+                        var data = history.map(item => item.change);
+
+                        var ctx = document.getElementById(`dashboardChart_${productId}`).getContext('2d');
+                        var chart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Change in Quantity',
+                                    data: data,
+                                    borderColor: 'rgb(75, 192, 192)',
+                                    borderWidth: 2
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+
+                        $(`#dashboardModal_${productId}`).modal('show');
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            function createQuantityChart(productId, history) {
+                // Prepare data for the chart
+                var labels = history.map(item => item.date);
+                var data = history.map(item => {
+                    if (item.action === "Update") {
+                        return item.change;
+                    } else if (item.action === "Delete") {
+                        return -item.change;
+                    }
+                    return 0;
+                });
+
+                // Create a line chart
+                var ctx = document.getElementById(`quantityChart_${productId}`).getContext('2d');
+                var quantityChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Change in Quantity',
+                            data: data,
+                            fill: false,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                        }],
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                            },
+                        },
+                    },
+                });
+            }
+        </script>
+
+    }
     <style>
         /* Reset some default styles */
         body, h1, h2, h3, p {
@@ -383,3 +505,5 @@
     </style>
 </body>
 </html>
+
+

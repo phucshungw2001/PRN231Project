@@ -40,17 +40,17 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel_@product.ProductId">Delete Quantity for @product.ProductName</h5>
+                        <h5 class="modal-title" id="deleteModalLabel_@product.ProductId">Số lượng sản phẩm của @product.ProductName</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <input type="number" id="deleteQuantityInput_@product.ProductId" class="form-control" placeholder="Enter quantity to delete">
+                        <input type="number" id="deleteQuantityInput_@product.ProductId" class="form-control" placeholder="Nhập số lượng sản phẩm">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-danger" onclick="deleteProductQuantity(@product.ProductId)">Delete</button>
+                        <button type="button" class="btn btn-danger" onclick="deleteProductQuantity(@product.ProductId)">Lấy hàng</button>
                     </div>
                 </div>
             </div>

@@ -141,7 +141,7 @@ namespace API.Controllers
             return Ok(_mapper.Map<ProductDTO>(product));
         }
 
-        [HttpDelete]
+        [HttpDelete("DeleteProductById")]
         public IActionResult Delete(int id)
         {
             Product product = _context.Products.FirstOrDefault(p => p.ProductId == id);
