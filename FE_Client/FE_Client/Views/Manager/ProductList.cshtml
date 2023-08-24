@@ -4,123 +4,136 @@
     ViewData["Title"] = "Product List";
 }
 
-<h1>Product list</h1>
-<div class="form-inline mb-3">
-    <input type="text" class="form-control mr-2" id="searchProductName" placeholder="Product Name">
-    <button class="btn btn-primary" id="btnSearch">Search</button>
-</div>
-@if (Model.Count > 0)
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>ProductName</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var product in Model)
-            {
-                <tr>
-                    <td>@product.ProductId</td>
-                    <td>@product.ProductName</td>
-                    <td>@product.Quantity</td>
-                    <td>@product.Price</td>
-                    <td>@product.Status</td>
-                    <td><a href="">Detail</a></td>
-                    <td>
-                        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addQuantityModal_@product.ProductId">Add Quantity</a>
-                    </td>
-                    <td>
-                        <a href="javascript:void(0);" onclick="showQuantityHistory(@product.ProductId)">DetailQuantity</a>
-                    </td>
-                </tr>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
 
-                <div class="modal fade" id="addQuantityModal_@product.ProductId" tabindex="-1" role="dialog" aria-labelledby="addQuantityModalLabel_@product.ProductId" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addQuantityModalLabel_@product.ProductId">Add Quantity for @product.ProductName</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <input type="number" id="quantityInput_@product.ProductId" class="form-control" placeholder="Enter quantity">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" onclick="addQuantity(@product.ProductId)">Add</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal fade" id="quantityDetailModal_@product.ProductId" tabindex="-1" role="dialog" aria-labelledby="quantityDetailModalLabel_@product.ProductId" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="quantityDetailModalLabel_@product.ProductId">Quantity Detail for @product.ProductName</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body" id="quantityDetailModalContent_@product.ProductId">
-                                <!-- Lịch sử thay đổi số lượng sẽ được hiển thị tại đây -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        </tbody>
-    </table>
-
-    @if (ViewBag.TotalPages > 1)
+</head>
+<body>
+    <h1>Product list</h1>
+    <div class="search-form">
+        <input type="text" class="search-input" id="searchProductName" placeholder="Search by Product Name">
+        <button class="search-button" id="btnSearch">Search</button>
+    </div>
+    @if (Model.Count > 0)
     {
-        <ul class="pagination">
-            @if (ViewBag.CurrentPage > 1)
-            {
-                <li class="page-item">
-                    <a class="page-link" href="@Url.Action("ProductList", new { page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">Previous</a>
-                </li>
-            }
+        <table class="table product-table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model)
+                {
+                    <tr>
+                        <td>@product.ProductId</td>
+                        <td>@product.ProductName</td>
+                        <td>@product.Quantity</td>
+                        <td>@product.Price</td>
+                        <td>
+                            @if (product.Status==true)
+                            {
+                                <span class="status available">Available</span>
+                            }
+                            else
+                            {
+                                <span class="status sold-out">Sold Out</span>
+                            }
+                        </td>
+                        <td><a class="detail-link" href="ProductDetail?productId=@product.ProductId">Detail</a></td>
+                        <td>
+                            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addQuantityModal_@product.ProductId">Add Quantity</a>
+                        </td>
+                        <td>
+                            <a href="javascript:void(0);" class="detail-link" onclick="showQuantityHistory(@product.ProductId)">Detail Quantity</a>
+                        </td>
+                    </tr>
+                    <div class="modal fade" id="addQuantityModal_@product.ProductId" tabindex="-1" role="dialog" aria-labelledby="addQuantityModalLabel_@product.ProductId" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addQuantityModalLabel_@product.ProductId">Add Quantity for @product.ProductName</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="number" id="quantityInput_@product.ProductId" class="form-control" placeholder="Enter quantity">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" onclick="addQuantity(@product.ProductId)">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            @for (int i = 1; i <= ViewBag.TotalPages; i++)
-            {
-                <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("ProductList", new { page = i, pageSize = ViewBag.PageSize })">@i</a>
-                </li>
-            }
+                    <div class="modal fade" id="quantityDetailModal_@product.ProductId" tabindex="-1" role="dialog" aria-labelledby="quantityDetailModalLabel_@product.ProductId" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="quantityDetailModalLabel_@product.ProductId">Quantity Detail for @product.ProductName</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" id="quantityDetailModalContent_@product.ProductId">
+                                    <!-- Lịch sử thay đổi số lượng sẽ được hiển thị tại đây -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </tbody>
+        </table>
+        @if (ViewBag.TotalPages > 1)
+        {
+            <ul class="pagination">
+                @if (ViewBag.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("ProductList", new { page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">Previous</a>
+                    </li>
+                }
 
-            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
-            {
-                <li class="page-item">
-                    <a class="page-link" href="@Url.Action("ProductList", new { page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">Next</a>
-                </li>
-            }
-        </ul>
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("ProductList", new { page = i, pageSize = ViewBag.PageSize })">@i</a>
+                    </li>
+                }
+
+                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("ProductList", new { page = ViewBag.CurrentPage + 1, pageSize = ViewBag.PageSize })">Next</a>
+                    </li>
+                }
+            </ul>
+        }
+    }
+    else
+    {
+        <p>No products found.</p>
     }
 
-}
-else
-{
-    <p>No products found.</p>
-}
-
-@section Scripts {
-    <script>
-        document.getElementById("btnSearch").addEventListener("click", function () {
-            var searchProductName = document.getElementById("searchProductName").value;
-            var url = "@Url.Action("ProductList")?page=1&pageSize=@ViewBag.PageSize&productName=" + searchProductName;
-            window.location.href = url;
-        });
-    </script>
+    @section Scripts {
+        <script>
+            document.getElementById("btnSearch").addEventListener("click", function () {
+                var searchProductName = document.getElementById("searchProductName").value;
+                var url = "@Url.Action("ProductList")?page=1&pageSize=@ViewBag.PageSize&searchProductName=" + searchProductName;
+                window.location.href = url;
+            });
+        </script>
     <script>
         function addQuantity(productId) {
             var quantity = parseInt(document.getElementById("quantityInput_" + productId).value);
@@ -186,5 +199,114 @@ else
             $("#quantityDetailModal_" + productId).modal("show");
         }
 
-    </script>
-}
+    </script>}
+    <style>
+        /* Reset some default styles */
+        body, h1, h2, h3, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Main container styles */
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Page title styles */
+        .page-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Search form styles */
+        .search-form {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            padding: 10px;
+            width: 70%;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .search-button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #3f51b5;
+            color: #fff;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        /* Product table styles */
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .product-table th, .product-table td {
+                padding: 10px;
+                text-align: left;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .product-table th {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+
+        .detail-link {
+            color: #3f51b5;
+            text-decoration: none;
+        }
+
+        /* Status styles */
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .available {
+            background-color: #4caf50;
+            color: #fff;
+        }
+
+        .sold-out {
+            background-color: #f44336;
+            color: #fff;
+        }
+
+        /* Pagination styles */
+        .pagination {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .page-item {
+            margin: 0 5px;
+        }
+
+        .page-link {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            text-decoration: none;
+            color: #333;
+            border-radius: 5px;
+        }
+
+            .page-link.active {
+                background-color: #3f51b5;
+                color: #fff;
+                border: 1px solid #3f51b5;
+            }
+
+    </style>
+</body>
+</html>

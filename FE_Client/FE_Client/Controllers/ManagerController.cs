@@ -1,10 +1,13 @@
 ﻿using API.DTO;
+using FE_Client.Form;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
+using NewtonsoftJson = Newtonsoft.Json.JsonConvert;
 
 namespace PetStoreClient.Controllers
 {
@@ -15,6 +18,7 @@ namespace PetStoreClient.Controllers
         private string DefaultApiUrl = "";
         private string DefaultApiUrlCusomer = "";
         private string DefaultApiUrlProductList = "";
+        private string DefaultApiUrlProductDetail = "";
         private string DefaultApiUrlEmployee = "";
 
         public ManagerController()
@@ -22,15 +26,16 @@ namespace PetStoreClient.Controllers
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
-            DefaultApiUrl = "https://localhost:7001/api/Account";
-            DefaultApiUrlCusomer = "https://localhost:7001/api/Customer";
+            DefaultApiUrl = "";
+            DefaultApiUrlCusomer = "http://localhost:5000/api/Customer";
             DefaultApiUrlProductList = "http://localhost:5000/api/Product/GetAllProduct";
+            DefaultApiUrlProductDetail = "http://localhost:5000/api/Product/GetProductById";
             DefaultApiUrlEmployee = "http://localhost:5000/api/Manager";
 
         }
         public async Task<IActionResult> Index()
         {
-          /*  if (HttpContext.Session.GetString("UserSession") == null)
+            if (HttpContext.Session.GetString("UserSession") == null)
                 return RedirectToAction("Index", "Login");
             //http://localhost:5000/api/Manager/manager%40gmail.com
 
@@ -48,45 +53,55 @@ namespace PetStoreClient.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                AccountInfo managerInfo = JsonSerializer.Deserialize<AccountInfo>(responseContent, options);
-                return View(managerInfo);
-            }*/
+                // Deserialize the JSON array into a list of AccountInfo objects
+                List<AccountInfo> managerInfos = System.Text.Json.JsonSerializer.Deserialize<List<AccountInfo>>(responseContent, options);
+
+                // Now you have a list of AccountInfo objects, you can process each item
+                foreach (var managerInfo in managerInfos)
+                {
+                    managerInfo.UserName = managerInfo.UserName?.Trim();
+                    managerInfo.Password = managerInfo.Password?.Trim();
+                }
+
+                return View(managerInfos);
+            }
+
             return View();
         }
-        /* 
 
-         public async Task<IActionResult> CustomerList(int page = 1, int pageSize = 10, string customerName = "")
-         {
-             if (HttpContext.Session.GetString("PetSession") == null)
-                 return RedirectToAction("Index", "Login");
-             HttpResponseMessage customerResponse;
-             customerResponse = await _client.GetAsync(DefaultApiUrlCusomer);
-             string strCustomer;
 
-             var options = new JsonSerializerOptions
-             {
-                 PropertyNameCaseInsensitive = true
-             };
+        public async Task<IActionResult> CustomerList(int page = 1, int pageSize = 10, string customerName = "")
+        {
+            if (HttpContext.Session.GetString("UserSession") == null)
+                return RedirectToAction("Index", "Login");
+            HttpResponseMessage customerResponse;
+            customerResponse = await _client.GetAsync(DefaultApiUrlCusomer);
+            string strCustomer;
 
-             strCustomer = await customerResponse.Content.ReadAsStringAsync();
-             List<CustomerDTO> listCustomers = JsonSerializer.Deserialize<List<CustomerDTO>>(strCustomer, options);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
 
-             if (!string.IsNullOrEmpty(customerName))
-             {
-                 listCustomers = listCustomers.Where(c => c.Name.Contains(customerName, StringComparison.OrdinalIgnoreCase)).ToList();
-             }
+            strCustomer = await customerResponse.Content.ReadAsStringAsync();
+            List<CustomerDTO> listCustomers = System.Text.Json.JsonSerializer.Deserialize<List<CustomerDTO>>(strCustomer, options);
 
-             int totalItems = listCustomers.Count;
-             int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-             int startIndex = (page - 1) * pageSize;
-             List<CustomerDTO> currentPageCustomer = listCustomers.Skip(startIndex).Take(pageSize).ToList();
+            if (!string.IsNullOrEmpty(customerName))
+            {
+                listCustomers = listCustomers.Where(c => c.CustomerName.Contains(customerName, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
 
-             ViewBag.TotalPages = totalPages;
-             ViewBag.CurrentPage = page;
-             ViewBag.PageSize = pageSize;
+            int totalItems = listCustomers.Count;
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            int startIndex = (page - 1) * pageSize;
+            List<CustomerDTO> currentPageCustomer = listCustomers.Skip(startIndex).Take(pageSize).ToList();
+
+            ViewBag.TotalPages = totalPages;
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
 
              return View(currentPageCustomer);
-         }*/
+         }
        
 
         public async Task<IActionResult> ProductList(int page = 1, int pageSize = 10, string productName = "")
@@ -102,7 +117,8 @@ namespace PetStoreClient.Controllers
                 PropertyNameCaseInsensitive = true
             };
 
-            List<ProductDTO> listProducts = JsonSerializer.Deserialize<List<ProductDTO>>(strProduct, options);
+            strProduct = await productResponse.Content.ReadAsStringAsync();
+            List<ProductDTO> listProducts = System.Text.Json.JsonSerializer.Deserialize<List<ProductDTO>>(strProduct, options);
 
             if (!string.IsNullOrEmpty(productName))
             {
@@ -133,6 +149,53 @@ namespace PetStoreClient.Controllers
             ViewBag.PageSize = pageSize;
 
             return View(currentPageProducts);
+        }
+
+        public async Task<IActionResult> EditProfile(EditProfileForm updateDto)
+        {
+            if (HttpContext.Session.GetString("UserSession") == null)
+                return RedirectToAction("Index", "Login");
+
+            ClaimsPrincipal claimsPrincipal = HttpContext.User as ClaimsPrincipal;
+            string email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+
+            var json = NewtonsoftJson.SerializeObject(updateDto); 
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            //http://localhost:5000/api/Manager/editProfile?email=manager%40gmail.com
+            HttpResponseMessage response = await _client.PutAsync(DefaultApiUrlEmployee + "/editProfile?email=" + email, content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ProductDetail(int productId)
+        {
+            if (HttpContext.Session.GetString("UserSession") == null)
+                return RedirectToAction("Index", "Login");
+            //http://localhost:5000/api/Product/GetProductById/1
+            HttpResponseMessage productDetailResponse = await _client.GetAsync(DefaultApiUrlProductDetail + "/" + productId);
+            string strProductDetail;
+            try
+            {
+               strProductDetail = await productDetailResponse.Content.ReadAsStringAsync();
+            }
+            catch (HttpRequestException ex)
+            {
+                return View("Error");
+            }
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            List<ProductDTO> productDetail = System.Text.Json.JsonSerializer.Deserialize<List<ProductDTO>>(strProductDetail, options);
+
+            return View(productDetail);
         }
 
     }

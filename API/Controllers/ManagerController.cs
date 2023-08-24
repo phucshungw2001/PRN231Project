@@ -47,7 +47,7 @@ namespace API.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var existingAccount = await _context.Accounts.SingleOrDefaultAsync(a => a.UserName == email);
+                var existingAccount = await _context.Accounts.Include(a => a.Manager).SingleOrDefaultAsync(a => a.UserName == email);
                 if (existingAccount == null)
                 {
                     return NotFound("Account not found.");
